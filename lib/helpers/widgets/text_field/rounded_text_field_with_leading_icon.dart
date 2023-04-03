@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
-class LoginPageTextField extends StatelessWidget {
-  final String hintText;
-  final bool obscureText;
-  final Function(String) onChanged;
-
-  const LoginPageTextField({
+class RoundedTextFieldWithLeadingIcon extends StatelessWidget {
+  const RoundedTextFieldWithLeadingIcon({
     required this.hintText,
     this.obscureText = false,
     required this.onChanged,
+    this.prefixIcon,
     super.key,
   });
+
+  final String hintText;
+  final bool obscureText;
+  final Function(String) onChanged;
+  final Icon? prefixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +21,11 @@ class LoginPageTextField extends StatelessWidget {
       child: TextField(
         // autofocus: true,
         decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.black),
-            borderRadius: BorderRadius.circular(100),
-          ),
+          // border: OutlineInputBorder(
+          //   borderSide: const BorderSide(color: Colors.black),
+          //   borderRadius: BorderRadius.circular(100),
+          // ),
+          prefixIcon: prefixIcon,
           hintText: hintText,
           hintStyle: Theme.of(context).textTheme.bodySmall,
         ),

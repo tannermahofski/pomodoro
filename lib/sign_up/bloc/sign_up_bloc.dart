@@ -64,8 +64,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
   Future<void> _formSubmitted(
       FormSubmitted event, Emitter<SignUpState> emit) async {
-    print('Form Submitted');
-
     emit(
       SignUpSubmitting(
         username: state.username,

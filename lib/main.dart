@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/auth/bloc/auth_bloc.dart';
 import 'package:pomodoro_timer/firebase_options.dart';
 import 'package:pomodoro_timer/helpers/theme/master_theme.dart';
-import 'package:pomodoro_timer/login/bloc/login_bloc.dart';
 import 'package:pomodoro_timer/repositories/auth_repository.dart';
+import 'package:pomodoro_timer/repositories/database_repository.dart';
 import 'package:pomodoro_timer/routes.dart';
-import 'package:pomodoro_timer/sign_up/bloc/sign_up_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> main() async {
@@ -17,24 +16,38 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  final AuthRepository authRepository = AuthRepository();
+  final DatabaseRepository databaseRepository = DatabaseRepository();
+  final AuthRepository authRepository = AuthRepository(
+    databaseRepository: databaseRepository,
+  );
 
   await authRepository.user.first;
 
-  runApp(MyApp(
-    authRepository: authRepository,
-  ));
+  runApp(
+    MyApp(
+      authRepository: authRepository,
+      databaseRepository: databaseRepository,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   final AuthRepository _authRepository;
-  const MyApp({super.key, required AuthRepository authRepository})
-      : _authRepository = authRepository;
+  final DatabaseRepository _databaseRepository;
+  const MyApp({
+    super.key,
+    required AuthRepository authRepository,
+    required DatabaseRepository databaseRepository,
+  })  : _authRepository = authRepository,
+        _databaseRepository = databaseRepository;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => _authRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(create: (context) => _authRepository),
+        RepositoryProvider(create: (context) => _databaseRepository),
+      ],
       child: BlocProvider(
         create: (context) => AuthBloc(authRepository: _authRepository),
         child: const AppWidget(),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class FomPageContainer extends StatelessWidget {
-  final List<Widget> children;
   const FomPageContainer({required this.children, super.key});
+
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {

@@ -27,11 +27,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onUserChanged(UserChanged event, Emitter<AuthState> emit) {
-    print('User Changed');
     _authRepository.currentUser.isNotEmpty
         ? emit(AuthState.authenticated(event.user))
         : emit(const AuthState.unauthenticated());
-    print(state);
   }
 
   void _onLogoutRequested(LogoutRequested event, Emitter<AuthState> emit) {

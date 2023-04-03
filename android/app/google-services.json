@@ -29,6 +29,13 @@
             {
               "client_id": "284193916384-qh8kq023q6n72facarslpvqltbks17fj.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "284193916384-si5ouue5kibsvmt97a5set10jh8j7180.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pomodoroTimer"
+              }
             }
           ]
         }

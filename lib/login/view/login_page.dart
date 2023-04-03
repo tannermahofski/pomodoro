@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pomodoro_timer/helpers/constants/file_constants.dart';
+import 'package:pomodoro_timer/helpers/widgets/button/elevated_button_with_error_message.dart';
 import 'package:pomodoro_timer/helpers/widgets/form_page_container.dart';
-import 'package:pomodoro_timer/helpers/widgets/login_page_button.dart';
-import 'package:pomodoro_timer/helpers/widgets/login_page_text_field.dart';
+import 'package:pomodoro_timer/helpers/widgets/text_field/rounded_text_field_with_error_message.dart';
 import 'package:pomodoro_timer/login/bloc/login_bloc.dart';
 import 'package:pomodoro_timer/repositories/auth_repository.dart';
 import 'package:pomodoro_timer/sign_up/view/sign_up_page.dart';
@@ -34,7 +36,9 @@ class LoginForm extends StatelessWidget {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
-          //Note: Show toast here
+          Fluttertoast.showToast(msg: 'Failed To Login');
+          //Note: In SignUpPage, we pop because FlowBuilder needs to go from the home screen.
+          //Note: Here There is no need to pop here
         }
       },
       child: const LoginFormContainer(),
@@ -58,9 +62,10 @@ class LoginFormContainer extends StatelessWidget {
               _generateForm(context, state),
             ],
           );
-        } else {
-          return const Center(child: CircularProgressIndicator());
         }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }
@@ -84,60 +89,38 @@ class LoginFormContainer extends StatelessWidget {
           ),
           Text(
             'Welcome',
-            style: Theme.of(context).textTheme.displayMedium,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * (1 / 25)),
-          LoginPageTextField(
+          const Spacer(),
+          RoundedTextFieldWithErrorMessage(
             hintText: 'Email',
+            obscureText: false,
+            prefixIcon: const Icon(MdiIcons.email),
             onChanged: (input) {
-              context.read<LoginBloc>().add(UsernameChanged(input));
+              context.read<LoginBloc>().add(EmailChanged(input));
             },
+            condition: (state.emailHasBeenChanged && !state.email.isValid()),
+            errorMessage: 'Invalid Email',
           ),
-          Opacity(
-            opacity:
-                (!state.email.isValid() && state.emailHasBeenChanged) ? 1 : 0,
-            child: Text(
-              'Invalid email',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-          ),
-          LoginPageTextField(
+          RoundedTextFieldWithErrorMessage(
             hintText: 'Password',
             obscureText: true,
+            prefixIcon: const Icon(MdiIcons.lock),
             onChanged: (input) {
               context.read<LoginBloc>().add(PasswordChanged(input));
             },
+            condition:
+                (state.passwordHasBeenChanged && !state.password.isValid()),
+            errorMessage: 'Invalid Password',
           ),
-          Opacity(
-            opacity: (!state.password.isValid() && state.passwordHasBeenChanged)
-                ? 1
-                : 0,
-            child: Text(
-              'Invalid password',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-          ),
-          const Expanded(
-            child: SizedBox(),
-          ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Opacity(
-                opacity: (state is LoginFailure) ? 1 : 0,
-                child: Text(
-                  'Failed To Login',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-              ),
-            ),
-          ),
-          LoginPageButton(
+          const Spacer(),
+          ElevatedButtonWithErrorMessage(
             text: 'Login',
             onPress: () {
               context.read<LoginBloc>().add(const FormSubmitted());
             },
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            condition: (state is LoginFailure),
+            errorMessage: 'Failed To Login',
           ),
           TextButton(
             onPressed: () {
@@ -145,9 +128,7 @@ class LoginFormContainer extends StatelessWidget {
             },
             child: const Text('Don\'t have an account?'),
           ),
-          const Expanded(
-            child: SizedBox(),
-          )
+          const Spacer(),
         ],
       ),
     );

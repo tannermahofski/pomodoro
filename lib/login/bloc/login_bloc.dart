@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:pomodoro_timer/repositories/auth_repository.dart';
 import 'package:pomodoro_timer/shared_models/email.dart';
 import 'package:pomodoro_timer/shared_models/password.dart';
-// import 'package:pomodoro_timer/shared_models/username.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -13,13 +12,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({required AuthRepository authRepository})
       : _authRepository = authRepository,
         super(const LoginInitial(email: Email(''), password: Password(''))) {
-    on<UsernameChanged>(_usernameChanged);
+    on<EmailChanged>(_usernameChanged);
     on<PasswordChanged>(_passwordChanged);
     on<FormSubmitted>(_formSubmitted);
   }
 
-  void _usernameChanged(UsernameChanged event, Emitter<LoginState> emit) {
-    print(event.usernameString);
+  void _usernameChanged(EmailChanged event, Emitter<LoginState> emit) {
     emit(
       LoginInProgress(
           email: Email(event.usernameString),
@@ -30,7 +28,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void _passwordChanged(PasswordChanged event, Emitter<LoginState> emit) {
-    print(event.passwordString);
     emit(
       LoginInProgress(
         email: state.email,
@@ -43,10 +40,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> _formSubmitted(
       FormSubmitted event, Emitter<LoginState> emit) async {
-    print('submitted');
-
     if (!state.email.isValid() || !state.password.isValid()) {
-      print('Failure');
       emit(
         LoginFailure(
           email: state.email,
@@ -59,11 +53,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
 
     try {
+      emit(
+        LoginSubmitting(
+          email: state.email,
+          password: state.password,
+          emailHasBeenChanged: state.emailHasBeenChanged,
+          passwordHasBeenChanged: state.passwordHasBeenChanged,
+        ),
+      );
+
+      await Future.delayed(const Duration(seconds: 3));
+
       await _authRepository.login(
           email: state.email.value, password: state.password.value);
 
       emit(LoginDone(email: state.email, password: state.password));
-    } on Exception catch (e) {
+    } on Exception catch (_) {
       emit(
         LoginFailure(
           email: state.email,
@@ -73,18 +78,5 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         ),
       );
     }
-
-    //   if (success) {
-    //     emit(LoginDone(username: state.username, password: state.password));
-    //   } else {
-    //     emit(
-    //       LoginInProgress(
-    //         username: state.username,
-    //         password: state.password,
-    //         usernameHasBeenChanged: state.usernameHasBeenChanged,
-    //         passwordHasBeenChanged: state.passwordHasBeenChanged,
-    //       ),
-    //     );
-    //   }
   }
 }

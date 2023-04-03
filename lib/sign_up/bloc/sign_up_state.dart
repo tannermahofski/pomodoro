@@ -1,14 +1,6 @@
 part of 'sign_up_bloc.dart';
 
 abstract class SignUpState extends Equatable {
-  final Username username;
-  final Email email;
-  final Password password;
-
-  final bool usernameHasBeenChanged;
-  final bool emailHasBeenChanged;
-  final bool passwordHasBeenChanged;
-
   const SignUpState({
     required this.username,
     required this.email,
@@ -17,6 +9,14 @@ abstract class SignUpState extends Equatable {
     required this.emailHasBeenChanged,
     required this.passwordHasBeenChanged,
   });
+
+  final Username username;
+  final Email email;
+  final Password password;
+
+  final bool usernameHasBeenChanged;
+  final bool emailHasBeenChanged;
+  final bool passwordHasBeenChanged;
 
   @override
   List<Object> get props => [

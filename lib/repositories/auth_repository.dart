@@ -1,16 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:pomodoro_timer/repositories/database_repository.dart';
 import 'package:pomodoro_timer/shared_models/user.dart';
 
 class AuthRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
+  final DatabaseRepository _databaseRepository;
 
-  AuthRepository({firebase_auth.FirebaseAuth? firebaseAuth})
-      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
+  AuthRepository({
+    firebase_auth.FirebaseAuth? firebaseAuth,
+    required DatabaseRepository databaseRepository,
+  })  : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
+        _databaseRepository = databaseRepository;
 
   var currentUser = User.empty;
 
   Stream<User> get user {
-    return _firebaseAuth.authStateChanges().map((firebaseUser) {
+    return _firebaseAuth.userChanges().map((firebaseUser) {
       final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
       currentUser = user;
       return user;
@@ -28,9 +33,9 @@ class AuthRepository {
         password: password,
       );
       await _firebaseAuth.currentUser?.updateDisplayName(username);
-    } on Exception catch (e) {
-      print('Failed to signup');
-      print(e);
+      await _firebaseAuth.currentUser?.reload();
+      await _databaseRepository.addUserData(currentUser);
+    } on Exception catch (_) {
       rethrow;
     }
   }
@@ -39,7 +44,12 @@ class AuthRepository {
     required String email,
     required String password,
   }) async {
-    _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    try {
+      _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+    } on Exception catch (_) {
+      rethrow;
+    }
   }
 
   Future<void> logout() async {

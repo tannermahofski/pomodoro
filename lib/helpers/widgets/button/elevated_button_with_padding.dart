@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class LoginPageButton extends StatelessWidget {
-  final String text;
-  final EdgeInsets padding;
-  final VoidCallback onPress;
-
-  const LoginPageButton({
+class ElevatedButtonWithPadding extends StatelessWidget {
+  const ElevatedButtonWithPadding({
     required this.text,
     required this.onPress,
     this.padding = const EdgeInsets.all(10.0),
     super.key,
   });
+
+  final String text;
+  final EdgeInsets padding;
+  final VoidCallback onPress;
 
   @override
   Widget build(BuildContext context) {
