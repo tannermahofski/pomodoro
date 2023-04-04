@@ -8,7 +8,7 @@ class DatabaseRepository {
   DatabaseRepository({FirebaseFirestore? db})
       : _db = db ?? FirebaseFirestore.instance;
 
-  Future<List<User>> getAllUsers() async {
+  Future<List<User>> retrieveAllUsers() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await _db.collection('users').get();
 
@@ -44,6 +44,7 @@ class DatabaseRepository {
         name: 'AddedFromFlutter',
         duration: 'custom duration',
         moreInfo: 'Extra Info');
+
     tasks.add(tempTask);
 
     Map<String, dynamic> update = {
@@ -53,11 +54,11 @@ class DatabaseRepository {
     await _db.collection('users').doc(userId).update(update);
   }
 
-  Stream getTasks(String userId) async* {
-    yield _db
+  Stream<User> user(String userId) {
+    return _db
         .collection('users')
         .doc(userId)
         .snapshots()
-        .map((taskDocument) => Task.fromSnapShot(taskDocument));
+        .map((snapshot) => User.fromSnapshot(snapshot));
   }
 }

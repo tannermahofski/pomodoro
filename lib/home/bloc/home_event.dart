@@ -16,4 +16,11 @@ class HomeAddNewTaskButtonPressed extends HomeEvent {
   final String userId;
 }
 
-// class HomeNewTaskAdded extends HomeEvent {}
+class HomeReloadTasksRequired extends HomeEvent {
+  const HomeReloadTasksRequired({required this.tasks});
+
+  final List<Task> tasks;
+
+  @override
+  List<Object> get props => [tasks];
+}

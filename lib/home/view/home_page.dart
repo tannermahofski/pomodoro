@@ -87,7 +87,8 @@ class HomeContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
-        if (state is HomeUserDataLoadSuccess) {
+        if (state is HomeUserDataLoadSuccess ||
+            state is HomeReloadTasksSuccess) {
           return Scaffold(
             appBar: AppBar(
               leading: const Icon(MdiIcons.clockOutline),
