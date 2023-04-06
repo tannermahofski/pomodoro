@@ -22,8 +22,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     _userSubscription = _databaseRepository.user(userId).listen((user) {
       if (state is! HomeInitial && state is! HomeUserDataLoadInProgress) {
-        print('hit');
-        print(state);
         add(HomeReloadTasksRequired(tasks: user.tasks ?? []));
       }
     });
@@ -50,14 +48,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<void> _onHomeAddNewTaskButtonPressed(
       HomeAddNewTaskButtonPressed event, Emitter<HomeState> emit) async {
-    await _databaseRepository.addTaskToUser(_userId);
     //Note: This will trigger the stream listener to get hit, calling _onHomReloadTasksRequired
+    // await _databaseRepository.addTaskToUser(_userId);
   }
 
   Future<void> _onHomReloadTasksRequired(
       HomeReloadTasksRequired event, Emitter<HomeState> emit) async {
     emit(HomeReloadTasksInProgress());
-    await Future.delayed(const Duration(seconds: 2));
-    emit(HomeReloadTasksSuccess(tasks: event.tasks));
+    await Future.delayed(const Duration(milliseconds: 500));
+    emit(HomeUserDataLoadSuccess(tasks: event.tasks));
+  }
+
+  @override
+  Future<void> close() {
+    _userSubscription.cancel();
+    return super.close();
   }
 }

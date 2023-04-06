@@ -5,6 +5,10 @@ import 'package:pomodoro_timer/helpers/constants/color_constants.dart';
 final ThemeData kAppTheme = ThemeData(
   scaffoldBackgroundColor: const Color.fromARGB(255, 246, 246, 246),
   brightness: Brightness.light,
+  primaryColor: kVioletBlue,
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    selectedItemColor: kVioletBlue,
+  ),
   inputDecorationTheme: InputDecorationTheme(
     prefixIconColor: kVioletBlue,
     border: OutlineInputBorder(
@@ -107,4 +111,9 @@ final ThemeData kAppTheme = ThemeData(
     color: kVioletBlue,
   ),
   iconTheme: const IconThemeData(color: kBlackOlive),
+  sliderTheme: const SliderThemeData(
+    activeTrackColor: kBlackOlive,
+    thumbColor: kBlackOlive,
+    inactiveTrackColor: kVioletBlue,
+  ),
 );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomodoro_timer/helpers/constants/color_constants.dart';
 import 'package:pomodoro_timer/home/widgets/prefix_icon.dart';
 import 'package:pomodoro_timer/shared_models/task.dart';
 
@@ -25,9 +26,11 @@ class TaskContainer extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  task.icon != null
-                      ? PrefixIcon(icon: task.icon!)
-                      : Container(),
+                  //TODO: Maybe some kind of leading image
+                  const CircleAvatar(
+                    backgroundColor: kVioletBlue,
+                    child: Icon(Icons.check),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -38,7 +41,7 @@ class TaskContainer extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         Text(
-                          task.duration,
+                          task.workingDuration,
                           style: Theme.of(context).textTheme.bodyMedium,
                         )
                       ],
@@ -46,10 +49,14 @@ class TaskContainer extends StatelessWidget {
                   ),
                 ],
               ),
-              Icon(
-                Icons.chevron_right_sharp,
-                color: Theme.of(context).iconTheme.color,
-              )
+              // CircleAvatar(
+              //   child: Icon(
+              //     // Icons.chevron_right_sharp,
+              //     Icons.play_arrow_rounded,
+              //     color: Theme.of(context).iconTheme.color,
+              //   ),
+              // )
+              const PrefixIcon(icon: Icon(Icons.play_arrow_rounded)),
             ],
           ),
         ),

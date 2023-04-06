@@ -12,15 +12,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({required AuthRepository authRepository})
       : _authRepository = authRepository,
         super(const LoginInitial(email: Email(''), password: Password(''))) {
-    on<EmailChanged>(_usernameChanged);
+    on<EmailChanged>(_emailChanged);
     on<PasswordChanged>(_passwordChanged);
     on<FormSubmitted>(_formSubmitted);
   }
 
-  void _usernameChanged(EmailChanged event, Emitter<LoginState> emit) {
+  void _emailChanged(EmailChanged event, Emitter<LoginState> emit) {
     emit(
       LoginInProgress(
-          email: Email(event.usernameString),
+          email: Email(event.emailString),
           password: state.password,
           emailHasBeenChanged: true,
           passwordHasBeenChanged: state.passwordHasBeenChanged),

@@ -36,16 +36,14 @@ class DatabaseRepository {
     }
   }
 
-  Future<void> addTaskToUser(String userId) async {
+  Future<void> addTaskToUser({
+    required String userId,
+    required Task task,
+  }) async {
     List<Task>? tasks = await retrieveUserTasks(userId);
     tasks ??= [];
 
-    Task tempTask = const Task(
-        name: 'AddedFromFlutter',
-        duration: 'custom duration',
-        moreInfo: 'Extra Info');
-
-    tasks.add(tempTask);
+    tasks.add(task);
 
     Map<String, dynamic> update = {
       'tasks': tasks.map((task) => task.toMap()).toList()

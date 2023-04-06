@@ -1,45 +1,54 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:pomodoro_timer/helpers/constants/model_constants.dart';
 
 class Task extends Equatable {
   const Task({
     required this.name,
-    required this.duration,
+    required this.workingDuration,
+    required this.shortBreakDuration,
+    required this.longBreakDuration,
     required this.moreInfo,
-    this.icon,
   });
 
   final String name;
-  final String duration;
+  final String workingDuration;
+  final String shortBreakDuration;
+  final String longBreakDuration;
+
   final String moreInfo;
-  final Icon? icon;
 
   factory Task.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> doc) {
     Map<String, dynamic> snapshot = doc.data()!;
     return Task(
-      name: snapshot['name'],
-      duration: snapshot['duration'],
-      moreInfo: snapshot['moreInfo'],
+      name: snapshot[kName],
+      workingDuration: snapshot[kWorkingDuration],
+      shortBreakDuration: snapshot[kShortBreakDuration],
+      longBreakDuration: snapshot[kLongBreakDuration],
+      moreInfo: snapshot[kMoreInfo],
     );
   }
 
-  factory Task.fromMap(Map<String, dynamic> snapshot) {
+  factory Task.fromMap(Map<String, dynamic> json) {
     return Task(
-      name: snapshot['name'],
-      duration: snapshot['duration'],
-      moreInfo: snapshot['moreInfo'],
+      name: json[kName],
+      workingDuration: json[kWorkingDuration],
+      shortBreakDuration: json[kShortBreakDuration],
+      longBreakDuration: json[kLongBreakDuration],
+      moreInfo: json[kMoreInfo],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
-      'duration': duration,
-      'moreInfo': moreInfo,
+      kName: name,
+      kWorkingDuration: workingDuration,
+      kShortBreakDuration: shortBreakDuration,
+      kLongBreakDuration: longBreakDuration,
+      kMoreInfo: moreInfo,
     };
   }
 
   @override
-  List<Object?> get props => [name, duration, moreInfo, icon];
+  List<Object?> get props => [name, workingDuration, moreInfo];
 }
