@@ -1,19 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:pomodoro_timer/repositories/database_repository.dart';
+
+import 'package:pomodoro_timer/repositories/abstract_authentication_repository.dart';
+import 'package:pomodoro_timer/repositories/abstract_database_repository.dart';
 import 'package:pomodoro_timer/shared_models/user.dart';
 
-class AuthRepository {
-  final firebase_auth.FirebaseAuth _firebaseAuth;
-  final DatabaseRepository _databaseRepository;
-
-  AuthRepository({
+class AuthenticationRepository implements AbstractAuthenticationRepository {
+  AuthenticationRepository({
     firebase_auth.FirebaseAuth? firebaseAuth,
-    required DatabaseRepository databaseRepository,
+    required AbstractDatabaseRepository databaseRepository,
   })  : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
         _databaseRepository = databaseRepository;
 
-  var currentUser = User.empty;
+  final firebase_auth.FirebaseAuth _firebaseAuth;
+  final AbstractDatabaseRepository _databaseRepository;
 
+  @override
+  User currentUser = User.empty;
+
+  @override
   Stream<User> get user {
     return _firebaseAuth.userChanges().map((firebaseUser) {
       final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
@@ -22,6 +26,7 @@ class AuthRepository {
     });
   }
 
+  @override
   Future<void> signUp({
     required String username,
     required String email,
@@ -34,26 +39,32 @@ class AuthRepository {
       );
       await _firebaseAuth.currentUser?.updateDisplayName(username);
       await _firebaseAuth.currentUser?.reload();
-      await _databaseRepository.addUserData(currentUser);
+      await _databaseRepository.addUserToDatabase(user: currentUser);
     } on Exception catch (_) {
       rethrow;
     }
   }
 
+  @override
   Future<void> login({
     required String email,
     required String password,
   }) async {
     try {
-      _firebaseAuth.signInWithEmailAndPassword(
+      await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
     } on Exception catch (_) {
       rethrow;
     }
   }
 
+  @override
   Future<void> logout() async {
-    await Future.wait([_firebaseAuth.signOut()]);
+    try {
+      await Future.wait([_firebaseAuth.signOut()]);
+    } on Exception catch (_) {
+      rethrow;
+    }
   }
 }
 

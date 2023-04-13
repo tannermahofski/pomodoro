@@ -9,14 +9,15 @@ class Task extends Equatable {
     required this.shortBreakDuration,
     required this.longBreakDuration,
     required this.moreInfo,
+    this.startDate,
   });
 
   final String name;
   final String workingDuration;
   final String shortBreakDuration;
   final String longBreakDuration;
-
   final String moreInfo;
+  final DateTime? startDate;
 
   factory Task.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> doc) {
     Map<String, dynamic> snapshot = doc.data()!;

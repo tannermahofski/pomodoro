@@ -7,20 +7,16 @@ abstract class HomeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class HomeStarted extends HomeEvent {}
-
-class HomeAddNewTaskButtonPressed extends HomeEvent {
-  const HomeAddNewTaskButtonPressed({
-    required this.userId,
-  });
-  final String userId;
-}
-
-class HomeReloadTasksRequired extends HomeEvent {
-  const HomeReloadTasksRequired({required this.tasks});
+class HomeReloadDataRequired extends HomeEvent {
+  const HomeReloadDataRequired({required this.tasks});
 
   final List<Task> tasks;
 
   @override
   List<Object> get props => [tasks];
+}
+
+class HomeTaskRemoved extends HomeEvent {
+  const HomeTaskRemoved({required this.task});
+  final Task task;
 }

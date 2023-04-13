@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'package:pomodoro_timer/helpers/constants/file_constants.dart';
 import 'package:pomodoro_timer/helpers/widgets/button/elevated_button_with_error_message.dart';
 import 'package:pomodoro_timer/helpers/widgets/form_page_container.dart';
 import 'package:pomodoro_timer/helpers/widgets/text_field/rounded_text_field_with_error_message.dart';
 import 'package:pomodoro_timer/login/bloc/login_bloc.dart';
-import 'package:pomodoro_timer/repositories/auth_repository.dart';
+import 'package:pomodoro_timer/repositories/abstract_authentication_repository.dart';
 import 'package:pomodoro_timer/sign_up/view/sign_up_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -20,8 +21,8 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider<LoginBloc>(
-        create: (context) =>
-            LoginBloc(authRepository: context.read<AuthRepository>()),
+        create: (context) => LoginBloc(
+            authRepository: context.read<AbstractAuthenticationRepository>()),
         child: const LoginForm(),
       ),
     );
@@ -99,7 +100,8 @@ class LoginFormContainer extends StatelessWidget {
             onChanged: (input) {
               context.read<LoginBloc>().add(EmailChanged(input));
             },
-            condition: (state.emailHasBeenChanged && !state.email.isValid()),
+            errorCondition:
+                (state.emailHasBeenChanged && !state.email.isValid()),
             errorMessage: 'Invalid Email',
           ),
           RoundedTextFieldWithErrorMessage(
@@ -109,7 +111,7 @@ class LoginFormContainer extends StatelessWidget {
             onChanged: (input) {
               context.read<LoginBloc>().add(PasswordChanged(input));
             },
-            condition:
+            errorCondition:
                 (state.passwordHasBeenChanged && !state.password.isValid()),
             errorMessage: 'Invalid Password',
           ),

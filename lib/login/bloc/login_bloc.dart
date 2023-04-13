@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:pomodoro_timer/repositories/auth_repository.dart';
+import 'package:pomodoro_timer/repositories/abstract_authentication_repository.dart';
 import 'package:pomodoro_timer/shared_models/email.dart';
 import 'package:pomodoro_timer/shared_models/password.dart';
 
@@ -8,8 +8,8 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final AuthRepository _authRepository;
-  LoginBloc({required AuthRepository authRepository})
+  final AbstractAuthenticationRepository _authRepository;
+  LoginBloc({required AbstractAuthenticationRepository authRepository})
       : _authRepository = authRepository,
         super(const LoginInitial(email: Email(''), password: Password(''))) {
     on<EmailChanged>(_emailChanged);
@@ -40,6 +40,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> _formSubmitted(
       FormSubmitted event, Emitter<LoginState> emit) async {
+    emit(
+      LoginSubmitting(
+        email: state.email,
+        password: state.password,
+        emailHasBeenChanged: state.emailHasBeenChanged,
+        passwordHasBeenChanged: state.passwordHasBeenChanged,
+      ),
+    );
     if (!state.email.isValid() || !state.password.isValid()) {
       emit(
         LoginFailure(
@@ -53,21 +61,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
 
     try {
-      emit(
-        LoginSubmitting(
-          email: state.email,
-          password: state.password,
-          emailHasBeenChanged: state.emailHasBeenChanged,
-          passwordHasBeenChanged: state.passwordHasBeenChanged,
-        ),
-      );
-
-      await Future.delayed(const Duration(seconds: 3));
-
       await _authRepository.login(
           email: state.email.value, password: state.password.value);
 
-      emit(LoginDone(email: state.email, password: state.password));
+      // await Future.delayed(const Duration(seconds: 3));
+      emit(
+        LoginDone(email: state.email, password: state.password),
+      );
     } on Exception catch (_) {
       emit(
         LoginFailure(

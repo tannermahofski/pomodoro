@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:pomodoro_timer/create_task/bloc/create_task_bloc.dart';
+import 'package:pomodoro_timer/create_task/helpers/constants.dart';
 import 'package:pomodoro_timer/helpers/widgets/button/elevated_button_with_error_message.dart';
 import 'package:pomodoro_timer/helpers/widgets/text_field/rounded_text_field_with_error_message.dart';
-import 'package:pomodoro_timer/repositories/auth_repository.dart';
-import 'package:pomodoro_timer/repositories/database_repository.dart';
+import 'package:pomodoro_timer/repositories/abstract_authentication_repository.dart';
+import 'package:pomodoro_timer/repositories/abstract_database_repository.dart';
 
 class CreateTaskPage extends StatelessWidget {
   static Route<void> route() =>
@@ -16,8 +18,8 @@ class CreateTaskPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CreateTaskBloc>(
       create: (context) => CreateTaskBloc(
-        userId: context.read<AuthRepository>().currentUser.id,
-        databaseRepository: context.read<DatabaseRepository>(),
+        userId: context.read<AbstractAuthenticationRepository>().currentUser.id,
+        databaseRepository: context.read<AbstractDatabaseRepository>(),
       ),
       child: const CreateTaskPageListener(),
     );
@@ -51,7 +53,9 @@ class CreateTaskPageContainer extends StatelessWidget {
       ),
       body: BlocBuilder<CreateTaskBloc, CreateTaskState>(
         builder: (context, state) {
-          if (state is CreateTaskInitial || state is CreateTaskInProgress) {
+          if (state is CreateTaskInitial ||
+              state is CreateTaskInProgress ||
+              state is CreateTaskSubmittedFailure) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: SafeArea(
@@ -73,15 +77,16 @@ class CreateTaskPageContainer extends StatelessWidget {
                               ),
                             );
                       },
-                      condition:
-                          !state.taskName.isValid() && state.taskNameHasChanged,
+                      errorCondition: !state.taskName.isValid() &&
+                          (state.taskNameHasChanged ||
+                              state.formSubmissionAttempted),
                       errorMessage: 'Invalid Name',
                     ),
                     SliderWithTitle(
                       text: 'Working Duration',
                       value: state.workingDuration.toDouble(),
-                      minValue: 5.0,
-                      maxValue: 60.0,
+                      minValue: kWorkingDurationMinValue,
+                      maxValue: kWorkingDurationMaxValue,
                       onChanged: (value) {
                         context.read<CreateTaskBloc>().add(
                               CreateTaskEventWorkingDurationChanged(
@@ -93,8 +98,8 @@ class CreateTaskPageContainer extends StatelessWidget {
                     SliderWithTitle(
                       text: 'Short Break Duration',
                       value: state.shortBreakDuration.toDouble(),
-                      minValue: 3.0,
-                      maxValue: 10.0,
+                      minValue: kShortBreakDurationMinValue,
+                      maxValue: kShortBreakDurationMaxValue,
                       onChanged: (value) {
                         context.read<CreateTaskBloc>().add(
                               CreateTaskEventShortBreakDurationChanged(
@@ -106,8 +111,8 @@ class CreateTaskPageContainer extends StatelessWidget {
                     SliderWithTitle(
                       text: 'Long Break Duration',
                       value: state.longBreakDuration.toDouble(),
-                      minValue: 5.0,
-                      maxValue: 15.0,
+                      minValue: kLongBreakDurationMinValue,
+                      maxValue: kLongBreakDurationMaxValue,
                       onChanged: (value) {
                         context.read<CreateTaskBloc>().add(
                               CreateTaskEventLongBreakDurationChanged(
@@ -125,9 +130,23 @@ class CreateTaskPageContainer extends StatelessWidget {
                               ),
                             );
                       },
-                      condition:
-                          !state.moreInfo.isValid() && state.moreInfoHasChanged,
+                      errorCondition: !state.moreInfo.isValid() &&
+                          (state.moreInfoHasChanged ||
+                              state.formSubmissionAttempted),
                       errorMessage: 'Invalid Information',
+                    ),
+                    RoundedTextFieldWithErrorMessage(
+                      hintText: 'Date',
+                      prefixIcon: IconButton(
+                        icon: const Icon(Icons.date_range),
+                        onPressed: () => showCalendarDialog(context, state),
+                      ),
+                      onChanged: (input) {},
+                      onTap: () => print('Tap'),
+                      textEditingController:
+                          state.startDateTextEditingController,
+                      errorCondition: false,
+                      errorMessage: 'Invalid date',
                     ),
                     const Spacer(),
                     ElevatedButtonWithErrorMessage(
@@ -137,7 +156,7 @@ class CreateTaskPageContainer extends StatelessWidget {
                               CreateTaskEventSubmitButtonClicked(),
                             );
                       },
-                      condition: false,
+                      condition: state is CreateTaskSubmittedFailure,
                       errorMessage: 'Failed to create new task',
                     ),
                   ],
@@ -151,6 +170,20 @@ class CreateTaskPageContainer extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void showCalendarDialog(BuildContext context, CreateTaskState state) {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    ).then((value) {
+      print(value);
+      context
+          .read<CreateTaskBloc>()
+          .add(CreateTaskStartDateChanged(dateTime: value));
+    });
   }
 }
 

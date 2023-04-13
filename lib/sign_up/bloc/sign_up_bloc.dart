@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:pomodoro_timer/repositories/auth_repository.dart';
+
+import 'package:pomodoro_timer/repositories/abstract_authentication_repository.dart';
 import 'package:pomodoro_timer/shared_models/email.dart';
 import 'package:pomodoro_timer/shared_models/password.dart';
 import 'package:pomodoro_timer/shared_models/username.dart';
@@ -9,8 +10,7 @@ part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  final AuthRepository _authRepository;
-  SignUpBloc({required AuthRepository authRepository})
+  SignUpBloc({required AbstractAuthenticationRepository authRepository})
       : _authRepository = authRepository,
         super(const SignUpInitial(
           username: Username(''),
@@ -22,6 +22,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     on<PasswordChanged>(_passwordChanged);
     on<FormSubmitted>(_formSubmitted);
   }
+
+  final AbstractAuthenticationRepository _authRepository;
 
   void _usernameChanged(UsernameChanged event, Emitter<SignUpState> emit) {
     emit(

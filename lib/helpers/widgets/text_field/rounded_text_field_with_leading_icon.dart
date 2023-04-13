@@ -6,33 +6,40 @@ class RoundedTextFieldWithLeadingIcon extends StatelessWidget {
     this.obscureText = false,
     required this.onChanged,
     this.prefixIcon,
+    this.textEditingController,
+    this.onTap,
     super.key,
   });
 
   final String hintText;
   final bool obscureText;
   final Function(String) onChanged;
-  final Icon? prefixIcon;
+  final Widget? prefixIcon;
+  final TextEditingController? textEditingController;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3.0),
       child: TextField(
-        // autofocus: true,
         decoration: InputDecoration(
-          // border: OutlineInputBorder(
-          //   borderSide: const BorderSide(color: Colors.black),
-          //   borderRadius: BorderRadius.circular(100),
-          // ),
           prefixIcon: prefixIcon,
           hintText: hintText,
-          hintStyle: Theme.of(context).textTheme.bodySmall,
+          hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.color
+                    ?.withOpacity(0.8),
+              ),
         ),
         textAlign: TextAlign.center,
         obscureText: obscureText,
         style: Theme.of(context).textTheme.bodyMedium,
         onChanged: onChanged,
+        onTap: onTap,
+        controller: textEditingController,
       ),
     );
   }

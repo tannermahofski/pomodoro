@@ -3,5 +3,10 @@ class MoreInfo {
 
   final String value;
 
-  bool isValid() => true;
+  bool isValid() {
+    if (value.isEmpty) {
+      return false;
+    }
+    return true;
+  }
 }

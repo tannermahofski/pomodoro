@@ -60,4 +60,12 @@ class CreateTaskEventMoreInfoChanged extends CreateTaskEvent {
   List<Object> get props => [moreInfoString];
 }
 
+class CreateTaskStartDateChanged extends CreateTaskEvent {
+  const CreateTaskStartDateChanged({
+    this.dateTime,
+  });
+
+  final DateTime? dateTime;
+}
+
 class CreateTaskEventSubmitButtonClicked extends CreateTaskEvent {}

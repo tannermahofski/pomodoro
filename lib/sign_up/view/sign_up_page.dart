@@ -7,7 +7,7 @@ import 'package:pomodoro_timer/helpers/constants/file_constants.dart';
 import 'package:pomodoro_timer/helpers/widgets/button/elevated_button_with_error_message.dart';
 import 'package:pomodoro_timer/helpers/widgets/form_page_container.dart';
 import 'package:pomodoro_timer/helpers/widgets/text_field/rounded_text_field_with_error_message.dart';
-import 'package:pomodoro_timer/repositories/auth_repository.dart';
+import 'package:pomodoro_timer/repositories/abstract_authentication_repository.dart';
 import 'package:pomodoro_timer/sign_up/bloc/sign_up_bloc.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -21,8 +21,8 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider<SignUpBloc>(
-        create: (context) =>
-            SignUpBloc(authRepository: context.read<AuthRepository>()),
+        create: (context) => SignUpBloc(
+            authRepository: context.read<AbstractAuthenticationRepository>()),
         child: const SignUpForm(),
       ),
     );
@@ -102,7 +102,7 @@ class SignUpFormContainer extends StatelessWidget {
             onChanged: (input) {
               context.read<SignUpBloc>().add(UsernameChanged(input));
             },
-            condition:
+            errorCondition:
                 (state.usernameHasBeenChanged && !state.username.isValid()),
             errorMessage: 'Invalid Username',
           ),
@@ -113,7 +113,8 @@ class SignUpFormContainer extends StatelessWidget {
             onChanged: (input) {
               context.read<SignUpBloc>().add(EmailChanged(input));
             },
-            condition: (state.emailHasBeenChanged && !state.email.isValid()),
+            errorCondition:
+                (state.emailHasBeenChanged && !state.email.isValid()),
             errorMessage: 'Invalid Email',
           ),
           RoundedTextFieldWithErrorMessage(
@@ -123,7 +124,7 @@ class SignUpFormContainer extends StatelessWidget {
             onChanged: (input) {
               context.read<SignUpBloc>().add(PasswordChanged(input));
             },
-            condition:
+            errorCondition:
                 (state.passwordHasBeenChanged && !state.password.isValid()),
             errorMessage: 'Invalid Password',
           ),

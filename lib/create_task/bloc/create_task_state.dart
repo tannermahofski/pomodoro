@@ -9,6 +9,9 @@ abstract class CreateTaskState extends Equatable {
     required this.shortBreakDuration,
     required this.moreInfo,
     required this.moreInfoHasChanged,
+    required this.formSubmissionAttempted,
+    this.startDate,
+    required this.startDateTextEditingController,
   });
 
   final TaskName taskName;
@@ -18,6 +21,9 @@ abstract class CreateTaskState extends Equatable {
   final double longBreakDuration;
   final MoreInfo moreInfo;
   final bool moreInfoHasChanged;
+  final bool formSubmissionAttempted;
+  final DateTime? startDate;
+  final TextEditingController startDateTextEditingController;
 
   @override
   List<Object> get props => [
@@ -28,6 +34,8 @@ abstract class CreateTaskState extends Equatable {
         shortBreakDuration,
         moreInfo,
         moreInfoHasChanged,
+        formSubmissionAttempted,
+        startDate ?? DateTime.now(),
       ];
 }
 
@@ -40,6 +48,9 @@ class CreateTaskInitial extends CreateTaskState {
     required super.shortBreakDuration,
     required super.moreInfo,
     super.moreInfoHasChanged = false,
+    super.formSubmissionAttempted = false,
+    super.startDate,
+    required super.startDateTextEditingController,
   });
 }
 
@@ -52,6 +63,9 @@ class CreateTaskInProgress extends CreateTaskState {
     required super.shortBreakDuration,
     required super.moreInfo,
     required super.moreInfoHasChanged,
+    required super.formSubmissionAttempted,
+    super.startDate,
+    required super.startDateTextEditingController,
   });
 }
 
@@ -64,6 +78,9 @@ class CreateTaskSubmitting extends CreateTaskState {
     required super.shortBreakDuration,
     required super.moreInfo,
     required super.moreInfoHasChanged,
+    required super.formSubmissionAttempted,
+    super.startDate,
+    required super.startDateTextEditingController,
   });
 }
 
@@ -76,5 +93,23 @@ class CreateTaskSubmittedSuccesfully extends CreateTaskState {
     required super.shortBreakDuration,
     required super.moreInfo,
     required super.moreInfoHasChanged,
+    required super.formSubmissionAttempted,
+    super.startDate,
+    required super.startDateTextEditingController,
+  });
+}
+
+class CreateTaskSubmittedFailure extends CreateTaskState {
+  const CreateTaskSubmittedFailure({
+    required super.taskName,
+    required super.taskNameHasChanged,
+    required super.workingDuration,
+    required super.longBreakDuration,
+    required super.shortBreakDuration,
+    required super.moreInfo,
+    required super.moreInfoHasChanged,
+    required super.formSubmissionAttempted,
+    super.startDate,
+    required super.startDateTextEditingController,
   });
 }

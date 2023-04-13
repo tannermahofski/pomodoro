@@ -9,17 +9,13 @@ abstract class HomeState extends Equatable {
 
 class HomeInitial extends HomeState {}
 
-class HomeUserDataLoadInProgress extends HomeState {}
+class HomeLoadDataInProgress extends HomeState {}
 
-class HomeReloadTasksInProgress extends HomeState {}
-
-class HomeUserDataLoadSuccess extends HomeState {
-  const HomeUserDataLoadSuccess({this.tasks});
+class HomeLoadDataSuccess extends HomeState {
+  const HomeLoadDataSuccess({this.tasks});
 
   final List<Task>? tasks;
 
   @override
   List<Object> get props => [tasks ?? []];
 }
-
-class HomeNavigatingToCreateTaskScreen extends HomeState {}

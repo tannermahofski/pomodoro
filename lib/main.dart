@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/auth/bloc/auth_bloc.dart';
 import 'package:pomodoro_timer/firebase_options.dart';
 import 'package:pomodoro_timer/helpers/theme/master_theme.dart';
-import 'package:pomodoro_timer/repositories/auth_repository.dart';
+import 'package:pomodoro_timer/repositories/abstract_authentication_repository.dart';
+import 'package:pomodoro_timer/repositories/abstract_database_repository.dart';
+import 'package:pomodoro_timer/repositories/authentication_repository.dart';
 import 'package:pomodoro_timer/repositories/database_repository.dart';
 import 'package:pomodoro_timer/routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +19,7 @@ Future<void> main() async {
   );
 
   final DatabaseRepository databaseRepository = DatabaseRepository();
-  final AuthRepository authRepository = AuthRepository(
+  final AuthenticationRepository authRepository = AuthenticationRepository(
     databaseRepository: databaseRepository,
   );
 
@@ -32,14 +34,15 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final AuthRepository _authRepository;
-  final DatabaseRepository _databaseRepository;
   const MyApp({
     super.key,
-    required AuthRepository authRepository,
-    required DatabaseRepository databaseRepository,
+    required AbstractAuthenticationRepository authRepository,
+    required AbstractDatabaseRepository databaseRepository,
   })  : _authRepository = authRepository,
         _databaseRepository = databaseRepository;
+
+  final AbstractAuthenticationRepository _authRepository;
+  final AbstractDatabaseRepository _databaseRepository;
 
   @override
   Widget build(BuildContext context) {
