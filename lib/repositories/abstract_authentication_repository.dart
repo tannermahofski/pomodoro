@@ -11,6 +11,8 @@ abstract class AbstractAuthenticationRepository {
     required String password,
   });
 
+  Future<bool> getIsUserVerified();
+
   Future<void> login({
     required String email,
     required String password,

@@ -46,6 +46,11 @@ final ThemeData kAppTheme = ThemeData(
     iconTheme: const IconThemeData(color: kBlackOlive),
   ),
   textTheme: TextTheme(
+    displayMedium: GoogleFonts.encodeSans(
+      color: kBlackOlive,
+      fontSize: 50,
+      fontWeight: FontWeight.w300,
+    ),
     headlineMedium: GoogleFonts.encodeSans(
       color: kBlackOlive,
       fontSize: 36,

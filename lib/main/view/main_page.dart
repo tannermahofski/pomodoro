@@ -6,6 +6,7 @@ import 'package:pomodoro_timer/create_task/view/create_task_page.dart';
 import 'package:pomodoro_timer/helpers/constants/color_constants.dart';
 import 'package:pomodoro_timer/home/view/home_page.dart';
 import 'package:pomodoro_timer/main/bloc/main_bloc.dart';
+import 'package:pomodoro_timer/planner/view/planner_page.dart';
 
 class MainPage extends StatelessWidget {
   static Page<void> page() => const MaterialPage<void>(child: MainPage());
@@ -49,9 +50,7 @@ class MainContainer extends StatelessWidget {
           if (state is MainStateHome) {
             return const HomePage();
           } else if (state is MainStatePlanner) {
-            return const Center(
-              child: Text('Planner'),
-            );
+            return const PlannerPage();
           }
           return Container();
         },
@@ -59,6 +58,7 @@ class MainContainer extends StatelessWidget {
       bottomNavigationBar: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) {
           return BottomNavigationBar(
+            currentIndex: state.index,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),

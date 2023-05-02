@@ -16,6 +16,14 @@ class CreateTaskEventTaskNameChanged extends CreateTaskEvent {
   List<Object> get props => [taskName];
 }
 
+class CreateTaskEventNumberOfWorkingSessionsChanged extends CreateTaskEvent {
+  const CreateTaskEventNumberOfWorkingSessionsChanged({
+    required this.numberOfWorkingSessions,
+  });
+
+  final double numberOfWorkingSessions;
+}
+
 class CreateTaskEventWorkingDurationChanged extends CreateTaskEvent {
   const CreateTaskEventWorkingDurationChanged({
     required this.workingDuration,
@@ -66,6 +74,51 @@ class CreateTaskStartDateChanged extends CreateTaskEvent {
   });
 
   final DateTime? dateTime;
+}
+
+class CreateTaskTimeChanged extends CreateTaskEvent {
+  const CreateTaskTimeChanged({
+    this.startTime,
+  });
+
+  final TimeOfDay? startTime;
+}
+
+class CreateTaskSundaySelected extends CreateTaskEvent {
+  const CreateTaskSundaySelected({this.value});
+
+  final bool? value;
+}
+
+class CreateTaskMondaySelected extends CreateTaskEvent {
+  const CreateTaskMondaySelected({this.value});
+
+  final bool? value;
+}
+
+class CreateTaskTuesdaySelected extends CreateTaskEvent {
+  const CreateTaskTuesdaySelected({this.value});
+  final bool? value;
+}
+
+class CreateTaskWednesdaySelected extends CreateTaskEvent {
+  const CreateTaskWednesdaySelected({this.value});
+  final bool? value;
+}
+
+class CreateTaskThursdaySelected extends CreateTaskEvent {
+  const CreateTaskThursdaySelected({this.value});
+  final bool? value;
+}
+
+class CreateTaskFridaySelected extends CreateTaskEvent {
+  const CreateTaskFridaySelected({this.value});
+  final bool? value;
+}
+
+class CreateTaskSaturdaySelected extends CreateTaskEvent {
+  const CreateTaskSaturdaySelected({this.value});
+  final bool? value;
 }
 
 class CreateTaskEventSubmitButtonClicked extends CreateTaskEvent {}

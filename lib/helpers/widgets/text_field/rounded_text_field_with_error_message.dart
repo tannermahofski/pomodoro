@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/helpers/widgets/text_field/rounded_text_field_with_leading_icon.dart';
 import 'package:pomodoro_timer/helpers/widgets/error_message.dart';
 
-class RoundedTextFieldWithErrorMessage extends StatefulWidget {
+class RoundedTextFieldWithErrorMessage extends StatelessWidget {
   const RoundedTextFieldWithErrorMessage({
     required this.hintText,
     this.prefixIcon,
     this.obscureText = false,
     required this.onChanged,
     this.onTap,
+    this.readOnly = false,
     this.textEditingController,
     required this.errorCondition,
     required this.errorMessage,
@@ -20,17 +21,11 @@ class RoundedTextFieldWithErrorMessage extends StatefulWidget {
   final bool obscureText;
   final Function(String) onChanged;
   final VoidCallback? onTap;
+  final bool readOnly;
   final TextEditingController? textEditingController;
   final bool errorCondition;
   final String errorMessage;
 
-  @override
-  State<RoundedTextFieldWithErrorMessage> createState() =>
-      _RoundedTextFieldWithErrorMessageState();
-}
-
-class _RoundedTextFieldWithErrorMessageState
-    extends State<RoundedTextFieldWithErrorMessage> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,21 +33,16 @@ class _RoundedTextFieldWithErrorMessageState
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         RoundedTextFieldWithLeadingIcon(
-          hintText: widget.hintText,
-          onChanged: widget.onChanged,
-          textEditingController: widget.textEditingController,
-          prefixIcon: widget.prefixIcon,
-          obscureText: widget.obscureText,
+          hintText: hintText,
+          onChanged: onChanged,
+          onTap: onTap,
+          readOnly: readOnly,
+          textEditingController: textEditingController,
+          prefixIcon: prefixIcon,
+          obscureText: obscureText,
         ),
-        ErrorMessage(
-            condition: widget.errorCondition, errorMessage: widget.errorMessage)
+        ErrorMessage(condition: errorCondition, errorMessage: errorMessage)
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    widget.textEditingController?.dispose();
-    super.dispose();
   }
 }

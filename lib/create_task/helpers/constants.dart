@@ -1,3 +1,7 @@
+const double kNumberOfWorkingSessionsMinValue = 2.0;
+const double kNumberOfWorkingSessionsStartingValue = 5.0;
+const double kNumberOfWorkingSessionsMaxValue = 10.0;
+
 const double kWorkingDurationMinValue = 5.0;
 const double kWorkingDurationStartingValue = 20.0;
 const double kWorkingDurationMaxValue = 60.0;

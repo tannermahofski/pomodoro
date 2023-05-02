@@ -8,6 +8,7 @@ class RoundedTextFieldWithLeadingIcon extends StatelessWidget {
     this.prefixIcon,
     this.textEditingController,
     this.onTap,
+    this.readOnly = false,
     super.key,
   });
 
@@ -17,12 +18,14 @@ class RoundedTextFieldWithLeadingIcon extends StatelessWidget {
   final Widget? prefixIcon;
   final TextEditingController? textEditingController;
   final VoidCallback? onTap;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3.0),
       child: TextField(
+        readOnly: readOnly,
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
           hintText: hintText,

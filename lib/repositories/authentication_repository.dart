@@ -40,9 +40,20 @@ class AuthenticationRepository implements AbstractAuthenticationRepository {
       await _firebaseAuth.currentUser?.updateDisplayName(username);
       await _firebaseAuth.currentUser?.reload();
       await _databaseRepository.addUserToDatabase(user: currentUser);
-    } on Exception catch (_) {
+      await _firebaseAuth.currentUser?.sendEmailVerification();
+    } on Exception catch (exception) {
+      print(exception);
       rethrow;
     }
+  }
+
+  @override
+  Future<bool> getIsUserVerified() async {
+    await _firebaseAuth.currentUser?.reload();
+    if (_firebaseAuth.currentUser != null) {
+      currentUser = _firebaseAuth.currentUser?.toUser ?? currentUser;
+    }
+    return _firebaseAuth.currentUser?.emailVerified ?? false;
   }
 
   @override
@@ -70,6 +81,11 @@ class AuthenticationRepository implements AbstractAuthenticationRepository {
 
 extension on firebase_auth.User {
   User get toUser {
-    return User(id: uid, email: email, username: displayName);
+    return User(
+      id: uid,
+      email: email,
+      username: displayName,
+      isVerified: emailVerified,
+    );
   }
 }

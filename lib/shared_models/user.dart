@@ -9,6 +9,7 @@ class User extends Equatable {
     this.email,
     this.password,
     this.tasks,
+    this.isVerified,
   });
 
   factory User.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
@@ -30,6 +31,7 @@ class User extends Equatable {
   final String? email;
   final String? password;
   final List<Task>? tasks;
+  final bool? isVerified;
 
   Map<String, dynamic> toMap() {
     return {

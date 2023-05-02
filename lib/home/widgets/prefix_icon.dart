@@ -5,16 +5,18 @@ class PrefixIcon extends StatelessWidget {
   const PrefixIcon({
     required this.icon,
     this.size = 40.0,
+    this.color = kVioletBlue,
     super.key,
   });
 
   final Icon icon;
   final double size;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: kVioletBlue,
+      color: color,
       borderRadius: BorderRadius.circular(10),
       child: SizedBox(
         width: size,
