@@ -52,7 +52,8 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(create: (context) => _databaseRepository),
       ],
       child: BlocProvider(
-        create: (context) => AuthBloc(authRepository: _authRepository),
+        create: (context) =>
+            AuthBloc(authenticationRepository: _authRepository),
         child: const AppWidget(),
       ),
     );

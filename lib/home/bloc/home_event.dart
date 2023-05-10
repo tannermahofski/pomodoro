@@ -18,5 +18,9 @@ class HomeReloadDataRequired extends HomeEvent {
 
 class HomeTaskRemoved extends HomeEvent {
   const HomeTaskRemoved({required this.task});
+
   final Task task;
+
+  @override
+  List<Object> get props => [task];
 }

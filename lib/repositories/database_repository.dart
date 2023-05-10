@@ -4,10 +4,10 @@ import 'package:pomodoro_timer/shared_models/task.dart';
 import 'package:pomodoro_timer/shared_models/user.dart';
 
 class DatabaseRepository implements AbstractDatabaseRepository {
-  final FirebaseFirestore _db;
-
   DatabaseRepository({FirebaseFirestore? db})
       : _db = db ?? FirebaseFirestore.instance;
+
+  final FirebaseFirestore _db;
 
   @override
   Future<List<User>> retrieveAllUsers() async {
@@ -82,6 +82,24 @@ class DatabaseRepository implements AbstractDatabaseRepository {
     tasks ??= [];
 
     tasks.remove(taskToDelete);
+
+    Map<String, dynamic> update = {
+      'tasks': tasks.map((task) => task.toMap()).toList()
+    };
+
+    _db.collection('users').doc(userId).update(update);
+  }
+
+  @override
+  Future<void> updateTask({
+    required String userId,
+    required Task updatedTask,
+  }) async {
+    List<Task>? tasks = await retrieveUserTasks(userId: userId);
+    tasks ??= [];
+
+    int indexOfTask = tasks.indexOf(updatedTask);
+    tasks[indexOfTask] = updatedTask;
 
     Map<String, dynamic> update = {
       'tasks': tasks.map((task) => task.toMap()).toList()

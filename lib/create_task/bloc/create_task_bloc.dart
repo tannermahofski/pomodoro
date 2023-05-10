@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:pomodoro_timer/create_task/helpers/constants.dart';
+import 'package:pomodoro_timer/create_task/helpers/helper_functions.dart';
 import 'package:pomodoro_timer/create_task/models/more_info.dart';
 import 'package:pomodoro_timer/create_task/models/task_name.dart';
 import 'package:pomodoro_timer/repositories/abstract_database_repository.dart';
@@ -12,21 +13,6 @@ import 'package:pomodoro_timer/shared_models/task.dart';
 
 part 'create_task_event.dart';
 part 'create_task_state.dart';
-
-String getTimeText(TimeOfDay timeOfDay) {
-  String text;
-
-  String hours = timeOfDay.hourOfPeriod.toString();
-  String minutes = timeOfDay.minute.toString();
-  String amOrPm = timeOfDay.period.name.toUpperCase();
-
-  if (minutes.length == 1) {
-    minutes = '0$minutes';
-  }
-  text = '$hours:$minutes $amOrPm';
-
-  return text;
-}
 
 class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
   CreateTaskBloc({
@@ -289,10 +275,10 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
   void _onCreateTaskStartDateChanged(
       CreateTaskStartDateChanged event, Emitter<CreateTaskState> emit) {
     String? text;
-    if (event.dateTime == null) {
+    if (event.startDate == null) {
       return;
     }
-    text = DateFormat.yMd().format(event.dateTime!);
+    text = DateFormat.yMd().format(event.startDate!);
 
     state.startDateTextEditingController.text = text;
 
@@ -307,7 +293,7 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
         moreInfo: state.moreInfo,
         moreInfoHasChanged: state.moreInfoHasChanged,
         formSubmissionAttempted: state.formSubmissionAttempted,
-        startDate: event.dateTime,
+        startDate: event.startDate,
         startDateTextEditingController: state.startDateTextEditingController,
         startTime: state.startTime,
         timeOfDayTextingEditingController:
@@ -603,6 +589,8 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
       startDate: state.startDate,
       startTime: state.startTime,
       recurrenceRule: _generateRecurrenceRule(),
+      currentStatus: CurrentStatus(
+          workingStatus: WorkingStatus.notStarted, date: DateTime.now()),
     );
 
     try {

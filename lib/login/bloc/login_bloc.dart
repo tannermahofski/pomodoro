@@ -64,7 +64,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await _authRepository.login(
           email: state.email.value, password: state.password.value);
 
-      // await Future.delayed(const Duration(seconds: 3));
       emit(
         LoginDone(email: state.email, password: state.password),
       );

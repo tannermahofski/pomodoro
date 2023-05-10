@@ -24,30 +24,39 @@ class TaskContainer extends StatelessWidget {
       onTap: onTap,
       onLongPress: onLongPress,
       onDoubleTap: onDoubleTap,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Material(
-          elevation: 5,
-          borderRadius: BorderRadius.circular(10),
-          shadowColor: Colors.white,
-          child: Container(
-            padding: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              elevation: 5,
               borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                LeadingWidget(task: task),
-                const CircleAvatar(
-                  backgroundColor: kVioletBlue,
-                  child: Icon(MdiIcons.chevronRight, color: Colors.white),
+              shadowColor: Colors.white,
+              child: Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                // const Icon(MdiIcons.chevronRight),
-              ],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    LeadingWidget(task: task),
+                    const CircleAvatar(
+                      backgroundColor: kVioletBlue,
+                      child: Icon(MdiIcons.chevronRight, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
+          Align(
+            alignment: Alignment.topRight,
+            child: task.currentStatus.workingStatus == WorkingStatus.completed
+                ? const CircleAvatar(child: Icon(Icons.check))
+                : Container(),
+          ),
+        ],
       ),
     );
   }

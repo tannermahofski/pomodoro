@@ -17,12 +17,16 @@ class TaskDataSource extends CalendarDataSource {
   @override
   DateTime getEndTime(int index) {
     DateTime startDate = getStart(index);
+    double hoursElapsed = getHoursElapsed(index);
+    int hours = hoursElapsed.floor();
+    int minutes = ((hoursElapsed - hours) * 60).toInt();
+
     DateTime endDate = DateTime(
       startDate.year,
       startDate.month,
       startDate.day,
-      startDate.hour + 2,
-      startDate.minute,
+      startDate.hour + hours,
+      startDate.minute + minutes,
     );
     return endDate;
   }
@@ -56,5 +60,14 @@ class TaskDataSource extends CalendarDataSource {
       startTime.minute,
     );
     return startDate;
+  }
+
+  double getHoursElapsed(int index) {
+    Task task = appointments![index];
+
+    int minutesElapsed = (task.numberOfWorkingSessions * task.workingDuration) +
+        ((task.numberOfWorkingSessions - 1) * task.shortBreakDuration);
+
+    return (minutesElapsed / 60);
   }
 }

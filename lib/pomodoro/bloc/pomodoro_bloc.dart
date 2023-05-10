@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pomodoro_timer/pomodoro/helper/session_helper.dart';
+import 'package:pomodoro_timer/repositories/abstract_database_repository.dart';
 import 'package:pomodoro_timer/shared_models/task.dart';
 import 'package:pomodoro_timer/ticker.dart';
 
@@ -10,9 +11,15 @@ part 'pomodoro_event.dart';
 part 'pomodoro_state.dart';
 
 class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
-  PomodoroBloc({required Ticker ticker, required Task task})
-      : _ticker = ticker,
+  PomodoroBloc({
+    required Ticker ticker,
+    required Task task,
+    required AbstractDatabaseRepository databaseRepository,
+    required String userId,
+  })  : _ticker = ticker,
         _task = task,
+        _databaseRepository = databaseRepository,
+        _userId = userId,
         super(
           PomodoroInitial(
             duration: task.workingDuration * 60,
@@ -37,6 +44,8 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
   final Ticker _ticker;
   final Task _task;
   late final Map<Session, int> sessionTimingMap;
+  final AbstractDatabaseRepository _databaseRepository;
+  final String _userId;
 
   StreamSubscription<int>? _tickerSubscription;
 
@@ -46,7 +55,21 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     return super.close();
   }
 
-  void _onPomodoroStarted(PomodoroStarted event, Emitter<PomodoroState> emit) {
+  Future<void> _onPomodoroStarted(
+    PomodoroStarted event,
+    Emitter<PomodoroState> emit,
+  ) async {
+    if (_task.currentStatus.workingStatus != WorkingStatus.inProgress) {
+      await _databaseRepository.updateTask(
+        userId: _userId,
+        updatedTask: _task.copyWith(
+          currentStatus: CurrentStatus(
+            workingStatus: WorkingStatus.inProgress,
+            date: DateTime.now(),
+          ),
+        ),
+      );
+    }
     int currentWorkingSession = state.workingSessionCounter;
     if (state.session == Session.working) {
       currentWorkingSession = state.workingSessionCounter + 1;
@@ -66,7 +89,10 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
         .listen((duration) => add(_PomodoroTicked(duration: duration)));
   }
 
-  void _onPomodoroPaused(PomodoroPaused event, Emitter<PomodoroState> emit) {
+  void _onPomodoroPaused(
+    PomodoroPaused event,
+    Emitter<PomodoroState> emit,
+  ) {
     if (state is PomodoroRunInProgress) {
       _tickerSubscription?.pause();
 
@@ -81,7 +107,10 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     }
   }
 
-  void _onPomodoroResumed(PomodoroResumed event, Emitter<PomodoroState> emit) {
+  void _onPomodoroResumed(
+    PomodoroResumed event,
+    Emitter<PomodoroState> emit,
+  ) {
     if (state is PomodoroRunPause) {
       _tickerSubscription?.resume();
       emit(
@@ -95,7 +124,10 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     }
   }
 
-  void _onPomodoroReset(PomodoroReset event, Emitter<PomodoroState> emit) {
+  void _onPomodoroReset(
+    PomodoroReset event,
+    Emitter<PomodoroState> emit,
+  ) {
     _tickerSubscription?.cancel();
     emit(
       PomodoroInitial(
@@ -107,7 +139,10 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     );
   }
 
-  void _onPomodoroTicked(_PomodoroTicked event, Emitter<PomodoroState> emit) {
+  Future<void> _onPomodoroTicked(
+    _PomodoroTicked event,
+    Emitter<PomodoroState> emit,
+  ) async {
     if (event.duration > 0) {
       emit(
         PomodoroRunInProgress(
@@ -129,6 +164,19 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
             maxDuration: 0,
             workingSessionCounter: workingSessionCounter,
           ),
+        );
+
+        CurrentStatus currentStatus = CurrentStatus(
+          workingStatus: WorkingStatus.completed,
+          date: DateTime.now(),
+        );
+
+        Task task = _task.copyWith(currentStatus: currentStatus);
+
+        //TODO: Update task in database with new status
+        await _databaseRepository.updateTask(
+          userId: _userId,
+          updatedTask: task,
         );
         return;
       }

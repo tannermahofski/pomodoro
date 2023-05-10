@@ -12,10 +12,17 @@ class HomeInitial extends HomeState {}
 class HomeLoadDataInProgress extends HomeState {}
 
 class HomeLoadDataSuccess extends HomeState {
-  const HomeLoadDataSuccess({this.tasks});
+  const HomeLoadDataSuccess({
+    this.tasks,
+    required this.saying,
+  });
 
   final List<Task>? tasks;
+  final String saying;
 
   @override
-  List<Object> get props => [tasks ?? []];
+  List<Object> get props => [
+        tasks ?? [],
+        saying,
+      ];
 }

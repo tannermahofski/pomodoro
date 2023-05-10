@@ -6,6 +6,8 @@ import 'package:pomodoro_timer/helpers/constants/color_constants.dart';
 import 'package:pomodoro_timer/helpers/widgets/button/stretched_elevated_button.dart';
 import 'package:pomodoro_timer/pomodoro/bloc/pomodoro_bloc.dart';
 import 'package:pomodoro_timer/pomodoro/helper/session_helper.dart';
+import 'package:pomodoro_timer/repositories/abstract_authentication_repository.dart';
+import 'package:pomodoro_timer/repositories/abstract_database_repository.dart';
 import 'package:pomodoro_timer/shared_models/task.dart';
 import 'package:pomodoro_timer/ticker.dart';
 
@@ -26,16 +28,18 @@ class PomodoroPage extends StatelessWidget {
       create: (context) => PomodoroBloc(
         ticker: const Ticker(),
         task: _task,
+        databaseRepository: context.read<AbstractDatabaseRepository>(),
+        userId: context.read<AbstractAuthenticationRepository>().currentUser.id,
       ),
-      child: PomodoroPageListener(
+      child: PomodoroListener(
         task: _task,
       ),
     );
   }
 }
 
-class PomodoroPageListener extends StatelessWidget {
-  const PomodoroPageListener({
+class PomodoroListener extends StatelessWidget {
+  const PomodoroListener({
     required Task task,
     super.key,
   }) : _task = task;
@@ -50,7 +54,7 @@ class PomodoroPageListener extends StatelessWidget {
           showCompletionDialog(context);
         }
       },
-      child: PomodoroPageContainer(
+      child: PomodoroBuilder(
         task: _task,
       ),
     );
@@ -82,8 +86,8 @@ class PomodoroPageListener extends StatelessWidget {
   }
 }
 
-class PomodoroPageContainer extends StatelessWidget {
-  const PomodoroPageContainer({super.key, required Task task}) : _task = task;
+class PomodoroBuilder extends StatelessWidget {
+  const PomodoroBuilder({super.key, required Task task}) : _task = task;
 
   final Task _task;
 
@@ -93,34 +97,40 @@ class PomodoroPageContainer extends StatelessWidget {
       appBar: AppBar(title: Text(_task.name)),
       body: BlocBuilder<PomodoroBloc, PomodoroState>(
         builder: (context, state) {
-          if (state is PomodoroRunComplete) {
+          if (_task.currentStatus.workingStatus == WorkingStatus.completed) {
             return const Center(
-              child: Text('Finished'),
+              child: Text('Already completed for the day!'),
+            );
+          } else {
+            if (state is PomodoroRunComplete) {
+              return const Center(
+                child: Text('Finished'),
+              );
+            }
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                const Spacer(),
+                CountdownProgressIndicator(task: _task),
+                const Spacer(),
+                OpacityIsStarted(
+                  shouldShowIfInitialState: true,
+                  child: StretchedElevatedButton(
+                    onPressed: () {
+                      context
+                          .read<PomodoroBloc>()
+                          .add(PomodoroStarted(duration: state.duration));
+                    },
+                    child: const Text('Start'),
+                  ),
+                ),
+                OpacityIsStarted(
+                  shouldShowIfInitialState: false,
+                  child: Text(sessionToSayingMap[state.session]!),
+                ),
+              ],
             );
           }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              const Spacer(),
-              CountdownProgressIndicator(task: _task),
-              const Spacer(),
-              OpacityIsStarted(
-                shouldShowIfInitialState: true,
-                child: StretchedElevatedButton(
-                  onPressed: () {
-                    context
-                        .read<PomodoroBloc>()
-                        .add(PomodoroStarted(duration: state.duration));
-                  },
-                  child: const Text('Start'),
-                ),
-              ),
-              OpacityIsStarted(
-                shouldShowIfInitialState: false,
-                child: Text(sessionToSayingMap[state.session]!),
-              ),
-            ],
-          );
         },
       ),
     );

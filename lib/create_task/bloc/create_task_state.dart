@@ -59,6 +59,13 @@ abstract class CreateTaskState extends Equatable {
         startDateTextEditingController,
         startTime ?? TimeOfDay.now(),
         timeOfDayTextingEditingController,
+        saturdaySelected,
+        mondaySelected,
+        tuesdaySelected,
+        wednesdaySelected,
+        thursdaySelected,
+        fridaySelected,
+        sundaySelected,
       ];
 }
 
@@ -85,22 +92,6 @@ class CreateTaskInitial extends CreateTaskState {
     super.fridaySelected = false,
     super.saturdaySelected = false,
   });
-
-  @override
-  List<Object> get props => [
-        taskName,
-        taskNameHasChanged,
-        workingDuration,
-        longBreakDuration,
-        shortBreakDuration,
-        moreInfo,
-        moreInfoHasChanged,
-        formSubmissionAttempted,
-        startDate ?? DateTime.now(),
-        startDateTextEditingController,
-        startTime ?? TimeOfDay.now(),
-        timeOfDayTextingEditingController,
-      ];
 }
 
 class CreateTaskInProgress extends CreateTaskState {
@@ -126,22 +117,6 @@ class CreateTaskInProgress extends CreateTaskState {
     required super.fridaySelected,
     required super.saturdaySelected,
   });
-
-  @override
-  List<Object> get props => [
-        taskName,
-        taskNameHasChanged,
-        workingDuration,
-        longBreakDuration,
-        shortBreakDuration,
-        moreInfo,
-        moreInfoHasChanged,
-        formSubmissionAttempted,
-        startDate ?? DateTime.now(),
-        startDateTextEditingController,
-        startTime ?? TimeOfDay.now(),
-        timeOfDayTextingEditingController,
-      ];
 }
 
 class CreateTaskSubmitting extends CreateTaskState {
@@ -167,22 +142,6 @@ class CreateTaskSubmitting extends CreateTaskState {
     required super.fridaySelected,
     required super.saturdaySelected,
   });
-
-  @override
-  List<Object> get props => [
-        taskName,
-        taskNameHasChanged,
-        workingDuration,
-        longBreakDuration,
-        shortBreakDuration,
-        moreInfo,
-        moreInfoHasChanged,
-        formSubmissionAttempted,
-        startDate ?? DateTime.now(),
-        startDateTextEditingController,
-        startTime ?? TimeOfDay.now(),
-        timeOfDayTextingEditingController,
-      ];
 }
 
 class CreateTaskSubmittedSuccesfully extends CreateTaskState {
@@ -208,22 +167,6 @@ class CreateTaskSubmittedSuccesfully extends CreateTaskState {
     required super.fridaySelected,
     required super.saturdaySelected,
   });
-
-  @override
-  List<Object> get props => [
-        taskName,
-        taskNameHasChanged,
-        workingDuration,
-        longBreakDuration,
-        shortBreakDuration,
-        moreInfo,
-        moreInfoHasChanged,
-        formSubmissionAttempted,
-        startDate ?? DateTime.now(),
-        startDateTextEditingController,
-        startTime ?? TimeOfDay.now(),
-        timeOfDayTextingEditingController,
-      ];
 }
 
 class CreateTaskSubmittedFailure extends CreateTaskState {
@@ -249,20 +192,4 @@ class CreateTaskSubmittedFailure extends CreateTaskState {
     required super.fridaySelected,
     required super.saturdaySelected,
   });
-
-  @override
-  List<Object> get props => [
-        taskName,
-        taskNameHasChanged,
-        workingDuration,
-        longBreakDuration,
-        shortBreakDuration,
-        moreInfo,
-        moreInfoHasChanged,
-        formSubmissionAttempted,
-        startDate ?? DateTime.now(),
-        startDateTextEditingController,
-        startTime ?? TimeOfDay.now(),
-        timeOfDayTextingEditingController,
-      ];
 }

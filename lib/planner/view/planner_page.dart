@@ -32,13 +32,13 @@ class PlannerListener extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<PlannerBloc, PlannerState>(
       listener: (context, state) {},
-      child: const PlannerContainer(),
+      child: const PlannerBuilder(),
     );
   }
 }
 
-class PlannerContainer extends StatelessWidget {
-  const PlannerContainer({super.key});
+class PlannerBuilder extends StatelessWidget {
+  const PlannerBuilder({super.key});
 
   @override
   Widget build(BuildContext context) {

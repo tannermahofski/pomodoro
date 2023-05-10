@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:pomodoro_timer/helpers/constants/maps.dart';
 import 'package:pomodoro_timer/helpers/constants/model_constants.dart';
 
 class Task extends Equatable {
@@ -14,6 +15,7 @@ class Task extends Equatable {
     this.startDate,
     this.startTime,
     this.recurrenceRule,
+    required this.currentStatus,
   });
 
   final String name;
@@ -25,6 +27,34 @@ class Task extends Equatable {
   final DateTime? startDate;
   final TimeOfDay? startTime;
   final String? recurrenceRule;
+  final CurrentStatus currentStatus;
+
+  bool shouldCompleteToday() {
+    DateTime today = DateTime.now();
+
+    if (recurrenceRule == null) {
+      return false;
+    }
+
+    List<String> recurrenceRuleSplit = recurrenceRule!.split('BYDAY=');
+
+    String daysInRecurrenceRule = recurrenceRuleSplit.last;
+
+    List<String> dayAbbreviations = daysInRecurrenceRule.split(',');
+    List<int> days = [];
+
+    for (String dayAbbreviation in dayAbbreviations) {
+      int? day = recurrenceRuleToDayMap[dayAbbreviation];
+
+      if (day == null) {
+        continue;
+      }
+
+      days.add(day);
+    }
+
+    return days.contains(today.weekday);
+  }
 
   factory Task.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> doc) {
     Map<String, dynamic> snapshot = doc.data()!;
@@ -42,6 +72,7 @@ class Task extends Equatable {
       recurrenceRule: snapshot.containsKey(kRecurrenceRule)
           ? snapshot[kRecurrenceRule]
           : null,
+      currentStatus: CurrentStatus.fromJson(snapshot[kCurrentStatus]),
     );
 
     return task;
@@ -64,6 +95,7 @@ class Task extends Equatable {
           : null,
       recurrenceRule:
           json.containsKey(kRecurrenceRule) ? json[kRecurrenceRule] : null,
+      currentStatus: CurrentStatus.fromJson(json[kCurrentStatus]),
     );
   }
 
@@ -78,7 +110,35 @@ class Task extends Equatable {
       kStartDate: startDate,
       kTimeOfDay: ("${startTime?.hour}*${startTime?.minute}"),
       kRecurrenceRule: recurrenceRule,
+      kCurrentStatus: currentStatus.toMap(),
     };
+  }
+
+  Task copyWith({
+    String? name,
+    int? numberOfWorkingSessions,
+    int? workingDuration,
+    int? shortBreakDuration,
+    int? longBreakDuration,
+    String? moreInfo,
+    DateTime? startDate,
+    TimeOfDay? startTime,
+    String? recurrenceRule,
+    CurrentStatus? currentStatus,
+  }) {
+    return Task(
+      name: name ?? this.name,
+      numberOfWorkingSessions:
+          numberOfWorkingSessions ?? this.numberOfWorkingSessions,
+      workingDuration: workingDuration ?? this.workingDuration,
+      shortBreakDuration: shortBreakDuration ?? this.shortBreakDuration,
+      longBreakDuration: longBreakDuration ?? this.longBreakDuration,
+      moreInfo: moreInfo ?? this.moreInfo,
+      startDate: startDate ?? this.startDate,
+      startTime: startTime ?? this.startTime,
+      recurrenceRule: recurrenceRule ?? this.recurrenceRule,
+      currentStatus: currentStatus ?? this.currentStatus,
+    );
   }
 
   @override
@@ -89,5 +149,38 @@ class Task extends Equatable {
         shortBreakDuration,
         longBreakDuration,
         moreInfo,
+      ];
+}
+
+enum WorkingStatus { completed, inProgress, notStarted }
+
+class CurrentStatus extends Equatable {
+  const CurrentStatus({required this.workingStatus, required this.date});
+
+  final WorkingStatus workingStatus;
+  final DateTime date;
+
+  factory CurrentStatus.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return CurrentStatus(
+      workingStatus: WorkingStatus.values[json[kWorkingStatus]],
+      date: json[kDate].toDate(),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      kWorkingStatus: workingStatus.index,
+      kDate: date,
+    };
+
+    return map;
+  }
+
+  @override
+  List<Object?> get props => [
+        workingStatus,
+        date,
       ];
 }

@@ -40,13 +40,13 @@ class SignUpForm extends StatelessWidget {
           Navigator.of(context).pop();
         }
       },
-      child: const SignUpFormContainer(),
+      child: const SignUpBuilder(),
     );
   }
 }
 
-class SignUpFormContainer extends StatelessWidget {
-  const SignUpFormContainer({super.key});
+class SignUpBuilder extends StatelessWidget {
+  const SignUpBuilder({super.key});
 
   @override
   Widget build(BuildContext context) {

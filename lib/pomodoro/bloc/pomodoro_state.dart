@@ -14,7 +14,12 @@ abstract class PomodoroState extends Equatable {
   final int workingSessionCounter;
 
   @override
-  List<Object> get props => [duration];
+  List<Object> get props => [
+        duration,
+        session,
+        maxDuration,
+        workingSessionCounter,
+      ];
 }
 
 class PomodoroInitial extends PomodoroState {

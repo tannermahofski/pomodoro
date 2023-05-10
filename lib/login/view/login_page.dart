@@ -23,14 +23,14 @@ class LoginPage extends StatelessWidget {
       body: BlocProvider<LoginBloc>(
         create: (context) => LoginBloc(
             authRepository: context.read<AbstractAuthenticationRepository>()),
-        child: const LoginForm(),
+        child: const LoginListener(),
       ),
     );
   }
 }
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({super.key});
+class LoginListener extends StatelessWidget {
+  const LoginListener({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +42,13 @@ class LoginForm extends StatelessWidget {
           //Note: Here There is no need to pop here
         }
       },
-      child: const LoginFormContainer(),
+      child: const LoginBuilder(),
     );
   }
 }
 
-class LoginFormContainer extends StatelessWidget {
-  const LoginFormContainer({super.key});
+class LoginBuilder extends StatelessWidget {
+  const LoginBuilder({super.key});
 
   @override
   Widget build(BuildContext context) {

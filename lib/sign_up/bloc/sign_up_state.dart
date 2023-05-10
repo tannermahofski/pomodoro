@@ -38,16 +38,6 @@ class SignUpInitial extends SignUpState {
     super.emailHasBeenChanged = false,
     super.passwordHasBeenChanged = false,
   });
-
-  @override
-  List<Object> get props => [
-        username,
-        email,
-        password,
-        usernameHasBeenChanged,
-        emailHasBeenChanged,
-        passwordHasBeenChanged,
-      ];
 }
 
 class SignUpInProgress extends SignUpState {
@@ -59,16 +49,6 @@ class SignUpInProgress extends SignUpState {
     required super.emailHasBeenChanged,
     required super.passwordHasBeenChanged,
   });
-
-  @override
-  List<Object> get props => [
-        username,
-        email,
-        password,
-        usernameHasBeenChanged,
-        emailHasBeenChanged,
-        passwordHasBeenChanged,
-      ];
 }
 
 class SignUpDone extends SignUpState {
@@ -80,16 +60,6 @@ class SignUpDone extends SignUpState {
     required super.emailHasBeenChanged,
     required super.passwordHasBeenChanged,
   });
-
-  @override
-  List<Object> get props => [
-        username,
-        email,
-        password,
-        usernameHasBeenChanged,
-        emailHasBeenChanged,
-        passwordHasBeenChanged,
-      ];
 }
 
 class SignUpFailure extends SignUpState {
@@ -101,16 +71,6 @@ class SignUpFailure extends SignUpState {
     required super.emailHasBeenChanged,
     required super.passwordHasBeenChanged,
   });
-
-  @override
-  List<Object> get props => [
-        username,
-        email,
-        password,
-        usernameHasBeenChanged,
-        emailHasBeenChanged,
-        passwordHasBeenChanged,
-      ];
 }
 
 class SignUpSubmitting extends SignUpState {
@@ -122,14 +82,4 @@ class SignUpSubmitting extends SignUpState {
     required super.emailHasBeenChanged,
     required super.passwordHasBeenChanged,
   });
-
-  @override
-  List<Object> get props => [
-        username,
-        email,
-        password,
-        usernameHasBeenChanged,
-        emailHasBeenChanged,
-        passwordHasBeenChanged,
-      ];
 }

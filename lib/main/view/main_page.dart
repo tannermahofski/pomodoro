@@ -18,15 +18,15 @@ class MainPage extends StatelessWidget {
       builder: (context, state) {
         return BlocProvider<MainBloc>(
           create: (context) => MainBloc(),
-          child: const MainContainer(),
+          child: const MainBuilder(),
         );
       },
     );
   }
 }
 
-class MainContainer extends StatelessWidget {
-  const MainContainer({super.key});
+class MainBuilder extends StatelessWidget {
+  const MainBuilder({super.key});
 
   @override
   Widget build(BuildContext context) {

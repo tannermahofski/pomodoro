@@ -9,3 +9,9 @@ const String kMoreInfo = 'moreInfo';
 const String kStartDate = 'startDate';
 const String kTimeOfDay = 'timeOfDay';
 const String kRecurrenceRule = 'recurrenceRule';
+const String kCurrentStatus = 'currentStatus';
+
+//* Current Status
+
+const String kWorkingStatus = 'workingStatus';
+const String kDate = 'date';
