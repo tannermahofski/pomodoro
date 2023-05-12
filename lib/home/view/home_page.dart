@@ -2,6 +2,8 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pomodoro_timer/auth/bloc/auth_bloc.dart';
+import 'package:pomodoro_timer/edit_task/view/edit_task_page.dart';
+import 'package:pomodoro_timer/helpers/constants/color_constants.dart';
 import 'package:pomodoro_timer/home/bloc/home_bloc.dart';
 import 'package:pomodoro_timer/home/widgets/task_container.dart';
 import 'package:pomodoro_timer/pomodoro/view/pomodoro_page.dart';
@@ -170,24 +172,37 @@ class HomeBuilder extends StatelessWidget {
   }
 
   Widget _generateListOfTasks(List<Task> tasks, BuildContext context) {
-    return SizedBox(
-      height: 250,
-      child: ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context, index) {
-          Task task = tasks[index];
-          return TaskContainer(
-            task: task,
-            onTap: () {
-              Navigator.of(context).push(
-                PomodoroPage.route(task),
-              );
-            },
-            onLongPress: () {
-              showDeletionDialog(task, context);
-            },
-          );
-        },
+    double height = tasks.length >= 2 ? 250 : 125;
+    return Material(
+      elevation: 5,
+      color: kLightYellow,
+      shadowColor: Colors.black,
+      borderRadius: BorderRadius.circular(10.0),
+      child: Container(
+        padding: const EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(
+            10,
+          ),
+        ),
+        height: height,
+        child: ListView.builder(
+          itemCount: tasks.length,
+          itemBuilder: (context, index) {
+            Task task = tasks[index];
+            return TaskContainer(
+              task: task,
+              onTap: () {
+                Navigator.of(context).push(
+                  PomodoroPage.route(task),
+                );
+              },
+              onLongPress: () {
+                showDeletionDialog(task, context);
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -209,95 +224,12 @@ class HomeBuilder extends StatelessWidget {
               HomeTaskRemoved(task: task),
             );
       },
-      btnCancelText: 'Cancel',
+      btnCancelText: 'Edit',
       btnCancelColor: Colors.green,
-      btnCancelIcon: Icons.cancel,
-      btnCancelOnPress: () {},
+      btnCancelIcon: Icons.edit,
+      btnCancelOnPress: () {
+        Navigator.of(context).push(EditTaskPage.route(task));
+      },
     ).show();
   }
 }
-
-// class HomeContainer extends StatelessWidget {
-//   const HomeContainer({
-//     required this.user,
-//     super.key,
-//   });
-
-//   final User user;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(
-//       child: Padding(
-//         padding: const EdgeInsets.all(8),
-//         child: BlocBuilder<HomeBloc, HomeState>(
-//           builder: (context, state) {
-//             List<Widget> children = [];
-//             if (state is HomeLoadDataSuccess) {
-//               children.add(
-//                 Align(
-//                   alignment: Alignment.topLeft,
-//                   child: Text(
-//                     'Good Morning, ${user.username}',
-//                     style: Theme.of(context)
-//                         .textTheme
-//                         .headlineMedium
-//                         ?.copyWith(fontSize: 30),
-//                   ),
-//                 ),
-//               );
-
-//               if (state.tasks?.isEmpty ?? true) {
-//                 children.add(
-//                   const Expanded(
-//                     child: Center(
-//                       child: Text(
-//                         'You have no tasks yet. Tap the plus to add one!',
-//                       ),
-//                     ),
-//                   ),
-//                 );
-//               } else {
-//                 children.add(
-//                   Expanded(
-//                     child: ListView.builder(
-//                       itemCount: state.tasks?.length ?? 0,
-//                       itemBuilder: (context, index) {
-//                         Task task = state.tasks![index];
-//                         return TaskContainer(
-//                           task: task,
-//                           onTap: () {
-//                             Navigator.of(context).push(
-//                               PomodoroPage.route(task),
-//                             );
-//                           },
-//                           onLongPress: () {
-//                             context.read<HomeBloc>().add(
-//                                   HomeTaskRemoved(task: task),
-//                                 );
-//                           },
-//                         );
-//                       },
-//                     ),
-//                   ),
-//                 );
-//               }
-//             } else {
-//               children.add(
-//                 const Expanded(
-//                   child: Center(
-//                     child: CircularProgressIndicator(),
-//                   ),
-//                 ),
-//               );
-//             }
-
-//             return Column(
-//               children: children,
-//             );
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }

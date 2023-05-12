@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+// import 'package:just_audio/just_audio.dart';
 import 'package:pomodoro_timer/pomodoro/helper/session_helper.dart';
 import 'package:pomodoro_timer/repositories/abstract_database_repository.dart';
 import 'package:pomodoro_timer/shared_models/task.dart';
@@ -39,6 +40,8 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
       Session.shortBreak: task.shortBreakDuration * 60,
       Session.longBreak: task.longBreakDuration * 60,
     };
+
+    // _audioPlayer = AudioPlayer()..setAsset('assets/sounds/jungle.mp3');
   }
 
   final Ticker _ticker;
@@ -46,6 +49,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
   late final Map<Session, int> sessionTimingMap;
   final AbstractDatabaseRepository _databaseRepository;
   final String _userId;
+  // late final AudioPlayer _audioPlayer;
 
   StreamSubscription<int>? _tickerSubscription;
 
@@ -73,6 +77,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     int currentWorkingSession = state.workingSessionCounter;
     if (state.session == Session.working) {
       currentWorkingSession = state.workingSessionCounter + 1;
+      // await _audioPlayer.play();
     }
     emit(
       PomodoroRunInProgress(
@@ -153,11 +158,12 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
         ),
       );
     } else {
+      // await _audioPlayer.pause();
+
       Session nextSession;
       int workingSessionCounter = state.workingSessionCounter;
 
       if (workingSessionCounter >= _task.numberOfWorkingSessions) {
-        //TODO: Update the status of the task to complete
         emit(
           PomodoroRunComplete(
             session: Session.longBreak,
@@ -173,7 +179,6 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
 
         Task task = _task.copyWith(currentStatus: currentStatus);
 
-        //TODO: Update task in database with new status
         await _databaseRepository.updateTask(
           userId: _userId,
           updatedTask: task,

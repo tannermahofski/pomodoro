@@ -39,7 +39,6 @@ class TaskDataSource extends CalendarDataSource {
   @override
   String? getRecurrenceRule(int index) {
     String? recurrenceRule = appointments![index].recurrenceRule;
-    print(recurrenceRule);
     return recurrenceRule;
   }
 

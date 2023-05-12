@@ -27,7 +27,7 @@ class TaskContainer extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(15.0),
             child: Material(
               elevation: 5,
               borderRadius: BorderRadius.circular(10),
@@ -53,7 +53,13 @@ class TaskContainer extends StatelessWidget {
           Align(
             alignment: Alignment.topRight,
             child: task.currentStatus.workingStatus == WorkingStatus.completed
-                ? const CircleAvatar(child: Icon(Icons.check))
+                ? const CircleAvatar(
+                    backgroundColor: kVioletBlue,
+                    child: Icon(
+                      Icons.check,
+                      color: Colors.white,
+                    ),
+                  )
                 : Container(),
           ),
         ],
@@ -75,8 +81,6 @@ class LeadingWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        //TODO: Alter leading image
-        // const Icon(MdiIcons.calendarCheck),
         const PrefixIcon(
           icon: Icon(MdiIcons.calendarCheck),
           color: kAppleGreen,

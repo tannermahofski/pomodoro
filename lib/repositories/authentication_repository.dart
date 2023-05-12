@@ -41,8 +41,7 @@ class AuthenticationRepository implements AbstractAuthenticationRepository {
       await _firebaseAuth.currentUser?.reload();
       await _databaseRepository.addUserToDatabase(user: currentUser);
       await _firebaseAuth.currentUser?.sendEmailVerification();
-    } on Exception catch (exception) {
-      print(exception);
+    } on Exception catch (_) {
       rethrow;
     }
   }
