@@ -49,6 +49,7 @@ abstract class CreateTaskState extends Equatable {
   List<Object> get props => [
         taskName,
         taskNameHasChanged,
+        numberOfWorkingSessions,
         workingDuration,
         longBreakDuration,
         shortBreakDuration,
@@ -117,6 +118,60 @@ class CreateTaskInProgress extends CreateTaskState {
     required super.fridaySelected,
     required super.saturdaySelected,
   });
+
+  factory CreateTaskInProgress.copyWithPreviousState({
+    required CreateTaskState previousState,
+    TaskName? taskName,
+    bool? taskNameHasChanged,
+    double? numberOfWorkingSessions,
+    double? workingDuration,
+    double? shortBreakDuration,
+    double? longBreakDuration,
+    MoreInfo? moreInfo,
+    bool? moreInfoHasChanged,
+    bool? formSubmissionAttempted,
+    DateTime? startDate,
+    TextEditingController? startDateTextEditingController,
+    TimeOfDay? startTime,
+    TextEditingController? timeOfDayTextingEditingController,
+    bool? saturdaySelected,
+    bool? mondaySelected,
+    bool? tuesdaySelected,
+    bool? wednesdaySelected,
+    bool? thursdaySelected,
+    bool? fridaySelected,
+    bool? sundaySelected,
+  }) {
+    return CreateTaskInProgress(
+      taskName: taskName ?? previousState.taskName,
+      taskNameHasChanged:
+          taskNameHasChanged ?? previousState.taskNameHasChanged,
+      numberOfWorkingSessions:
+          numberOfWorkingSessions ?? previousState.numberOfWorkingSessions,
+      workingDuration: workingDuration ?? previousState.workingDuration,
+      shortBreakDuration:
+          shortBreakDuration ?? previousState.shortBreakDuration,
+      longBreakDuration: longBreakDuration ?? previousState.longBreakDuration,
+      moreInfo: moreInfo ?? previousState.moreInfo,
+      moreInfoHasChanged:
+          moreInfoHasChanged ?? previousState.moreInfoHasChanged,
+      formSubmissionAttempted:
+          formSubmissionAttempted ?? previousState.formSubmissionAttempted,
+      startDate: startDate ?? previousState.startDate,
+      startDateTextEditingController: startDateTextEditingController ??
+          previousState.startDateTextEditingController,
+      startTime: startTime ?? previousState.startTime,
+      timeOfDayTextingEditingController: timeOfDayTextingEditingController ??
+          previousState.timeOfDayTextingEditingController,
+      sundaySelected: sundaySelected ?? previousState.sundaySelected,
+      mondaySelected: mondaySelected ?? previousState.mondaySelected,
+      tuesdaySelected: tuesdaySelected ?? previousState.tuesdaySelected,
+      wednesdaySelected: wednesdaySelected ?? previousState.wednesdaySelected,
+      thursdaySelected: thursdaySelected ?? previousState.thursdaySelected,
+      fridaySelected: fridaySelected ?? previousState.fridaySelected,
+      saturdaySelected: saturdaySelected ?? previousState.saturdaySelected,
+    );
+  }
 }
 
 class CreateTaskSubmitting extends CreateTaskState {
@@ -142,6 +197,37 @@ class CreateTaskSubmitting extends CreateTaskState {
     required super.fridaySelected,
     required super.saturdaySelected,
   });
+
+  factory CreateTaskSubmitting.fromPreviousState({
+    required CreateTaskState previousState,
+    DateTime? startDate,
+    TimeOfDay? startTime,
+  }) {
+    return CreateTaskSubmitting(
+      taskName: previousState.taskName,
+      taskNameHasChanged: previousState.taskNameHasChanged,
+      numberOfWorkingSessions: previousState.numberOfWorkingSessions,
+      workingDuration: previousState.workingDuration,
+      shortBreakDuration: previousState.shortBreakDuration,
+      longBreakDuration: previousState.longBreakDuration,
+      moreInfo: previousState.moreInfo,
+      moreInfoHasChanged: previousState.moreInfoHasChanged,
+      formSubmissionAttempted: true,
+      startDate: startDate ?? previousState.startDate,
+      startDateTextEditingController:
+          previousState.startDateTextEditingController,
+      startTime: startTime ?? previousState.startTime,
+      timeOfDayTextingEditingController:
+          previousState.timeOfDayTextingEditingController,
+      sundaySelected: previousState.sundaySelected,
+      mondaySelected: previousState.mondaySelected,
+      tuesdaySelected: previousState.tuesdaySelected,
+      wednesdaySelected: previousState.wednesdaySelected,
+      thursdaySelected: previousState.thursdaySelected,
+      fridaySelected: previousState.fridaySelected,
+      saturdaySelected: previousState.saturdaySelected,
+    );
+  }
 }
 
 class CreateTaskSubmittedSuccesfully extends CreateTaskState {
@@ -167,6 +253,34 @@ class CreateTaskSubmittedSuccesfully extends CreateTaskState {
     required super.fridaySelected,
     required super.saturdaySelected,
   });
+
+  factory CreateTaskSubmittedSuccesfully.copyFromPreviousState(
+      CreateTaskState previousState) {
+    return CreateTaskSubmittedSuccesfully(
+      taskName: previousState.taskName,
+      taskNameHasChanged: previousState.taskNameHasChanged,
+      numberOfWorkingSessions: previousState.numberOfWorkingSessions,
+      workingDuration: previousState.workingDuration,
+      shortBreakDuration: previousState.shortBreakDuration,
+      longBreakDuration: previousState.longBreakDuration,
+      moreInfo: previousState.moreInfo,
+      moreInfoHasChanged: previousState.moreInfoHasChanged,
+      formSubmissionAttempted: previousState.formSubmissionAttempted,
+      startDate: previousState.startDate,
+      startDateTextEditingController:
+          previousState.startDateTextEditingController,
+      startTime: previousState.startTime,
+      timeOfDayTextingEditingController:
+          previousState.timeOfDayTextingEditingController,
+      sundaySelected: previousState.sundaySelected,
+      mondaySelected: previousState.mondaySelected,
+      tuesdaySelected: previousState.tuesdaySelected,
+      wednesdaySelected: previousState.wednesdaySelected,
+      thursdaySelected: previousState.thursdaySelected,
+      fridaySelected: previousState.fridaySelected,
+      saturdaySelected: previousState.saturdaySelected,
+    );
+  }
 }
 
 class CreateTaskSubmittedFailure extends CreateTaskState {
@@ -192,4 +306,32 @@ class CreateTaskSubmittedFailure extends CreateTaskState {
     required super.fridaySelected,
     required super.saturdaySelected,
   });
+
+  factory CreateTaskSubmittedFailure.copyFromPreviousState(
+      CreateTaskState previousState) {
+    return CreateTaskSubmittedFailure(
+      taskName: previousState.taskName,
+      taskNameHasChanged: previousState.taskNameHasChanged,
+      numberOfWorkingSessions: previousState.numberOfWorkingSessions,
+      workingDuration: previousState.workingDuration,
+      shortBreakDuration: previousState.shortBreakDuration,
+      longBreakDuration: previousState.longBreakDuration,
+      moreInfo: previousState.moreInfo,
+      moreInfoHasChanged: previousState.moreInfoHasChanged,
+      formSubmissionAttempted: previousState.formSubmissionAttempted,
+      startDate: previousState.startDate,
+      startDateTextEditingController:
+          previousState.startDateTextEditingController,
+      startTime: previousState.startTime,
+      timeOfDayTextingEditingController:
+          previousState.timeOfDayTextingEditingController,
+      sundaySelected: previousState.sundaySelected,
+      mondaySelected: previousState.mondaySelected,
+      tuesdaySelected: previousState.tuesdaySelected,
+      wednesdaySelected: previousState.wednesdaySelected,
+      thursdaySelected: previousState.thursdaySelected,
+      fridaySelected: previousState.fridaySelected,
+      saturdaySelected: previousState.saturdaySelected,
+    );
+  }
 }

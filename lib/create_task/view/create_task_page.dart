@@ -206,7 +206,7 @@ class CreateTaskBuilder extends StatelessWidget {
                 errorMessage: 'Invalid time',
               ),
               const Spacer(),
-              const FrequencyPicker(),
+              const CreateTaskFrequencyPicker(),
               const Spacer(),
               ElevatedButtonWithErrorMessage(
                 text: 'Submit Task',
@@ -258,8 +258,8 @@ class CreateTaskBuilder extends StatelessWidget {
   }
 }
 
-class FrequencyPicker extends StatelessWidget {
-  const FrequencyPicker({super.key});
+class CreateTaskFrequencyPicker extends StatelessWidget {
+  const CreateTaskFrequencyPicker({super.key});
 
   @override
   Widget build(BuildContext context) {
