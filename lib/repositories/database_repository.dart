@@ -77,7 +77,6 @@ class DatabaseRepository implements AbstractDatabaseRepository {
     required String userId,
     required Task taskToDelete,
   }) async {
-    print('Removing task');
     List<Task>? tasks = await retrieveUserTasks(userId: userId);
     tasks ??= [];
 

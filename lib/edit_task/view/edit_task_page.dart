@@ -1,56 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
-import 'package:pomodoro_timer/create_task/bloc/create_task_bloc.dart';
 import 'package:pomodoro_timer/create_task/helpers/constants.dart';
+import 'package:pomodoro_timer/create_task/view/create_task_page.dart';
+
+import 'package:pomodoro_timer/edit_task/bloc/edit_task_bloc.dart';
 import 'package:pomodoro_timer/helpers/widgets/button/elevated_button_with_error_message.dart';
 import 'package:pomodoro_timer/helpers/widgets/text_field/rounded_text_field_with_error_message.dart';
 import 'package:pomodoro_timer/repositories/abstract_authentication_repository.dart';
 import 'package:pomodoro_timer/repositories/abstract_database_repository.dart';
+import 'package:pomodoro_timer/shared_models/task.dart';
 
-class CreateTaskPage extends StatelessWidget {
-  static Route<void> route() =>
-      MaterialPageRoute(builder: (_) => const CreateTaskPage());
+class EditTaskPage extends StatelessWidget {
+  static Route<void> route(Task task) => MaterialPageRoute(
+        builder: (context) => EditTaskPage(task: task),
+      );
 
-  const CreateTaskPage({super.key});
+  const EditTaskPage({
+    required Task task,
+    super.key,
+  }) : _task = task;
+
+  final Task _task;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CreateTaskBloc>(
-      create: (context) => CreateTaskBloc(
-        userId: context.read<AbstractAuthenticationRepository>().currentUser.id,
+    return BlocProvider<EditTaskBloc>(
+      create: (context) => EditTaskBloc(
+        task: _task,
         databaseRepository: context.read<AbstractDatabaseRepository>(),
+        userId: context.read<AbstractAuthenticationRepository>().currentUser.id,
       ),
-      child: const CreateTaskListener(),
+      child: EditTaskListener(
+        task: _task,
+      ),
     );
   }
 }
 
-class CreateTaskListener extends StatelessWidget {
-  const CreateTaskListener({super.key});
+class EditTaskListener extends StatelessWidget {
+  const EditTaskListener({
+    required Task task,
+    super.key,
+  }) : _task = task;
+
+  final Task _task;
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateTaskBloc, CreateTaskState>(
+    return BlocListener<EditTaskBloc, EditTaskState>(
       listener: (context, state) {
-        if (state is CreateTaskSubmittedSuccesfully) {
+        if (state is EditTaskSubmitted) {
           Navigator.of(context).pop();
         }
       },
-      child: const CreateTaskPageContainer(),
+      child: EditTaskContainer(
+        task: _task,
+      ),
     );
   }
 }
 
-class CreateTaskPageContainer extends StatelessWidget {
-  const CreateTaskPageContainer({super.key});
+class EditTaskContainer extends StatelessWidget {
+  const EditTaskContainer({
+    required Task task,
+    super.key,
+  }) : _task = task;
+
+  final Task _task;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create New Task'),
+        title: Text('Edit \'${_task.name}\''),
       ),
       body: SafeArea(
         child: Padding(
@@ -63,8 +86,10 @@ class CreateTaskPageContainer extends StatelessWidget {
                     minWidth: constraints.maxWidth,
                     minHeight: constraints.maxHeight,
                   ),
-                  child: const IntrinsicHeight(
-                    child: CreateTaskBuilder(),
+                  child: IntrinsicHeight(
+                    child: EditTaskBuilder(
+                      task: _task,
+                    ),
                   ),
                 ),
               );
@@ -76,16 +101,21 @@ class CreateTaskPageContainer extends StatelessWidget {
   }
 }
 
-class CreateTaskBuilder extends StatelessWidget {
-  const CreateTaskBuilder({super.key});
+class EditTaskBuilder extends StatelessWidget {
+  const EditTaskBuilder({
+    required Task task,
+    super.key,
+  }) : _task = task;
+
+  final Task _task;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateTaskBloc, CreateTaskState>(
+    return BlocBuilder<EditTaskBloc, EditTaskState>(
       builder: (context, state) {
-        if (state is CreateTaskInitial ||
-            state is CreateTaskInProgress ||
-            state is CreateTaskSubmittedFailure) {
+        if (state is EditTaskInitial ||
+            state is EditTaskInProgress ||
+            state is EditTaskFailure) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,15 +127,14 @@ class CreateTaskBuilder extends StatelessWidget {
               ),
               RoundedTextFieldWithErrorMessage(
                 hintText: 'Task Name',
+                initialValue: _task.name,
                 onChanged: (input) {
-                  context.read<CreateTaskBloc>().add(
-                        CreateTaskEventTaskNameChanged(
-                          taskName: input,
-                        ),
-                      );
+                  context
+                      .read<EditTaskBloc>()
+                      .add(TaskNameChanged(taskName: input));
                 },
-                errorCondition: !state.taskName.isValid() &&
-                    (state.taskNameHasChanged || state.formSubmissionAttempted),
+                errorCondition:
+                    state.taskNameHasChanged && !state.taskName.isValid(),
                 errorMessage: 'Invalid Name',
               ),
               SliderWithTitle(
@@ -115,8 +144,8 @@ class CreateTaskBuilder extends StatelessWidget {
                 minValue: kNumberOfWorkingSessionsMinValue,
                 maxValue: kNumberOfWorkingSessionsMaxValue,
                 onChanged: (value) {
-                  context.read<CreateTaskBloc>().add(
-                        CreateTaskEventNumberOfWorkingSessionsChanged(
+                  context.read<EditTaskBloc>().add(
+                        NumberOfWorkingSessionsChanged(
                           numberOfWorkingSessions: value,
                         ),
                       );
@@ -129,11 +158,9 @@ class CreateTaskBuilder extends StatelessWidget {
                 minValue: kWorkingDurationMinValue,
                 maxValue: kWorkingDurationMaxValue,
                 onChanged: (value) {
-                  context.read<CreateTaskBloc>().add(
-                        CreateTaskEventWorkingDurationChanged(
-                          workingDuration: value,
-                        ),
-                      );
+                  context
+                      .read<EditTaskBloc>()
+                      .add(WorkingDurationChanged(workingDuration: value));
                 },
               ),
               SliderWithTitle(
@@ -143,38 +170,19 @@ class CreateTaskBuilder extends StatelessWidget {
                 minValue: kShortBreakDurationMinValue,
                 maxValue: kShortBreakDurationMaxValue,
                 onChanged: (value) {
-                  context.read<CreateTaskBloc>().add(
-                        CreateTaskEventShortBreakDurationChanged(
-                          shortBreakDuration: value,
-                        ),
-                      );
-                },
-              ),
-              SliderWithTitle(
-                text: 'Long Break Duration',
-                value: state.longBreakDuration,
-                unit: 'Minutes',
-                minValue: kLongBreakDurationMinValue,
-                maxValue: kLongBreakDurationMaxValue,
-                onChanged: (value) {
-                  context.read<CreateTaskBloc>().add(
-                        CreateTaskEventLongBreakDurationChanged(
-                          longBreakDuration: value,
-                        ),
-                      );
+                  context.read<EditTaskBloc>().add(
+                      ShortBreakDurationChanged(shortBreakDuration: value));
                 },
               ),
               RoundedTextFieldWithErrorMessage(
                 hintText: 'More Info',
+                initialValue: _task.moreInfo,
                 onChanged: (input) {
-                  context.read<CreateTaskBloc>().add(
-                        CreateTaskEventMoreInfoChanged(
-                          moreInfoString: input,
-                        ),
-                      );
+                  context
+                      .read<EditTaskBloc>()
+                      .add(MoreInfoChanged(moreInfo: input));
                 },
-                errorCondition: !state.moreInfo.isValid() &&
-                    (state.moreInfoHasChanged || state.formSubmissionAttempted),
+                errorCondition: false,
                 errorMessage: 'Invalid Information',
               ),
               RoundedTextFieldWithErrorMessage(
@@ -187,8 +195,7 @@ class CreateTaskBuilder extends StatelessWidget {
                 onTap: () => showCalendarDialog(context),
                 readOnly: true,
                 textEditingController: state.startDateTextEditingController,
-                errorCondition:
-                    state.formSubmissionAttempted && state.startDate == null,
+                errorCondition: false,
                 errorMessage: 'Invalid date',
               ),
               RoundedTextFieldWithErrorMessage(
@@ -201,30 +208,27 @@ class CreateTaskBuilder extends StatelessWidget {
                 onTap: () => showTimeDialog(context),
                 readOnly: true,
                 textEditingController: state.timeOfDayTextingEditingController,
-                errorCondition:
-                    state.formSubmissionAttempted && state.startTime == null,
+                errorCondition: false,
                 errorMessage: 'Invalid time',
               ),
               const Spacer(),
-              const CreateTaskFrequencyPicker(),
+              const EditTaskFrequencyPicker(),
               const Spacer(),
               ElevatedButtonWithErrorMessage(
                 text: 'Submit Task',
                 onPress: () {
-                  context.read<CreateTaskBloc>().add(
-                        CreateTaskEventSubmitButtonClicked(),
-                      );
+                  context.read<EditTaskBloc>().add(FormSubmitted());
                 },
-                condition: state is CreateTaskSubmittedFailure,
+                condition: false,
                 errorMessage: 'Failed to create new task',
               ),
             ],
           );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
         }
+
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }
@@ -237,9 +241,7 @@ class CreateTaskBuilder extends StatelessWidget {
       lastDate: DateTime(2025),
     ).then((value) {
       if (value != null) {
-        context
-            .read<CreateTaskBloc>()
-            .add(CreateTaskStartDateChanged(startDate: value));
+        context.read<EditTaskBloc>().add(StartDateChanged(startDate: value));
       }
     });
   }
@@ -250,20 +252,18 @@ class CreateTaskBuilder extends StatelessWidget {
       initialTime: TimeOfDay.now(),
     ).then((value) {
       if (value != null) {
-        context
-            .read<CreateTaskBloc>()
-            .add(CreateTaskTimeChanged(startTime: value));
+        context.read<EditTaskBloc>().add(StartTimeChanged(startTime: value));
       }
     });
   }
 }
 
-class CreateTaskFrequencyPicker extends StatelessWidget {
-  const CreateTaskFrequencyPicker({super.key});
+class EditTaskFrequencyPicker extends StatelessWidget {
+  const EditTaskFrequencyPicker({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateTaskBloc, CreateTaskState>(
+    return BlocBuilder<EditTaskBloc, EditTaskState>(
       builder: (context, state) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -273,8 +273,8 @@ class CreateTaskFrequencyPicker extends StatelessWidget {
               value: state.sundaySelected,
               onChanged: (value) {
                 context
-                    .read<CreateTaskBloc>()
-                    .add(CreateTaskSundaySelected(value: value));
+                    .read<EditTaskBloc>()
+                    .add(SundaySelected(sundaySelected: value ?? false));
               },
             ),
             DayCheckboxWidget(
@@ -282,8 +282,8 @@ class CreateTaskFrequencyPicker extends StatelessWidget {
               value: state.mondaySelected,
               onChanged: (value) {
                 context
-                    .read<CreateTaskBloc>()
-                    .add(CreateTaskMondaySelected(value: value));
+                    .read<EditTaskBloc>()
+                    .add(MondaySelected(mondaySelected: value ?? false));
               },
             ),
             DayCheckboxWidget(
@@ -291,8 +291,8 @@ class CreateTaskFrequencyPicker extends StatelessWidget {
               value: state.tuesdaySelected,
               onChanged: (value) {
                 context
-                    .read<CreateTaskBloc>()
-                    .add(CreateTaskTuesdaySelected(value: value));
+                    .read<EditTaskBloc>()
+                    .add(TuesdaySelected(tuesdaySelected: value ?? false));
               },
             ),
             DayCheckboxWidget(
@@ -300,8 +300,8 @@ class CreateTaskFrequencyPicker extends StatelessWidget {
               value: state.wednesdaySelected,
               onChanged: (value) {
                 context
-                    .read<CreateTaskBloc>()
-                    .add(CreateTaskWednesdaySelected(value: value));
+                    .read<EditTaskBloc>()
+                    .add(WednesdaySelected(wednesdaySelected: value ?? false));
               },
             ),
             DayCheckboxWidget(
@@ -309,8 +309,8 @@ class CreateTaskFrequencyPicker extends StatelessWidget {
               value: state.thursdaySelected,
               onChanged: (value) {
                 context
-                    .read<CreateTaskBloc>()
-                    .add(CreateTaskThursdaySelected(value: value));
+                    .read<EditTaskBloc>()
+                    .add(ThursdaySelected(thursdaySelected: value ?? false));
               },
             ),
             DayCheckboxWidget(
@@ -318,8 +318,8 @@ class CreateTaskFrequencyPicker extends StatelessWidget {
               value: state.fridaySelected,
               onChanged: (value) {
                 context
-                    .read<CreateTaskBloc>()
-                    .add(CreateTaskFridaySelected(value: value));
+                    .read<EditTaskBloc>()
+                    .add(FridaySelected(fridaySelected: value ?? false));
               },
             ),
             DayCheckboxWidget(
@@ -327,86 +327,13 @@ class CreateTaskFrequencyPicker extends StatelessWidget {
               value: state.saturdaySelected,
               onChanged: (value) {
                 context
-                    .read<CreateTaskBloc>()
-                    .add(CreateTaskSaturdaySelected(value: value));
+                    .read<EditTaskBloc>()
+                    .add(SaturdaySelected(saturdaySelected: value ?? false));
               },
             ),
           ],
         );
       },
-    );
-  }
-}
-
-class DayCheckboxWidget extends StatelessWidget {
-  const DayCheckboxWidget({
-    required this.day,
-    required this.value,
-    required this.onChanged,
-    super.key,
-  });
-
-  final String day;
-  final bool value;
-  final Function(bool?) onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(day),
-        Checkbox(
-          value: value,
-          onChanged: onChanged,
-        )
-      ],
-    );
-  }
-}
-
-class SliderWithTitle extends StatelessWidget {
-  const SliderWithTitle({
-    required this.text,
-    required this.value,
-    required this.unit,
-    required this.minValue,
-    required this.maxValue,
-    required this.onChanged,
-    super.key,
-  });
-
-  final String text;
-  final double value;
-  final String unit;
-  final double minValue;
-  final double maxValue;
-  final Function(double) onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(
-          text,
-          textAlign: TextAlign.start,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        Row(
-          children: <Widget>[
-            Text('${value.toInt().toString()} $unit'.trim()),
-            Expanded(
-              child: Slider(
-                value: value,
-                label: value.toInt().toString(),
-                divisions: (maxValue - minValue).toInt(),
-                min: minValue,
-                max: maxValue,
-                onChanged: onChanged,
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

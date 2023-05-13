@@ -13,6 +13,7 @@ class RoundedTextFieldWithErrorMessage extends StatelessWidget {
     this.textEditingController,
     required this.errorCondition,
     required this.errorMessage,
+    this.initialValue,
     super.key,
   });
 
@@ -25,6 +26,7 @@ class RoundedTextFieldWithErrorMessage extends StatelessWidget {
   final TextEditingController? textEditingController;
   final bool errorCondition;
   final String errorMessage;
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,7 @@ class RoundedTextFieldWithErrorMessage extends StatelessWidget {
           textEditingController: textEditingController,
           prefixIcon: prefixIcon,
           obscureText: obscureText,
+          initialValue: initialValue,
         ),
         ErrorMessage(condition: errorCondition, errorMessage: errorMessage)
       ],

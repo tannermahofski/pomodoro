@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/helpers/constants/maps.dart';
 import 'package:pomodoro_timer/helpers/constants/model_constants.dart';
 
+//TODO: Remove long break duration
 class Task extends Equatable {
   const Task({
     required this.name,
@@ -144,11 +145,11 @@ class Task extends Equatable {
   @override
   List<Object?> get props => [
         name,
-        numberOfWorkingSessions,
-        workingDuration,
-        shortBreakDuration,
-        longBreakDuration,
-        moreInfo,
+        // numberOfWorkingSessions,
+        // workingDuration,
+        // shortBreakDuration,
+        // longBreakDuration,
+        // moreInfo,
       ];
 }
 

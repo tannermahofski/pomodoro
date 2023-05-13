@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pomodoro_timer/pomodoro/helper/session_helper.dart';
@@ -39,6 +40,10 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
       Session.shortBreak: task.shortBreakDuration * 60,
       Session.longBreak: task.longBreakDuration * 60,
     };
+
+    _assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
+    _audio = Audio('assets/sounds/jungle.mp3');
+    _assetsAudioPlayer.open(_audio, autoStart: false);
   }
 
   final Ticker _ticker;
@@ -46,6 +51,8 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
   late final Map<Session, int> sessionTimingMap;
   final AbstractDatabaseRepository _databaseRepository;
   final String _userId;
+  late final AssetsAudioPlayer _assetsAudioPlayer;
+  late final Audio _audio;
 
   StreamSubscription<int>? _tickerSubscription;
 
@@ -73,6 +80,9 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     int currentWorkingSession = state.workingSessionCounter;
     if (state.session == Session.working) {
       currentWorkingSession = state.workingSessionCounter + 1;
+      if (!_assetsAudioPlayer.isPlaying.value) {
+        await _assetsAudioPlayer.play();
+      }
     }
     emit(
       PomodoroRunInProgress(
@@ -153,11 +163,14 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
         ),
       );
     } else {
+      if (_assetsAudioPlayer.isPlaying.value) {
+        await _assetsAudioPlayer.pause();
+      }
+
       Session nextSession;
       int workingSessionCounter = state.workingSessionCounter;
 
       if (workingSessionCounter >= _task.numberOfWorkingSessions) {
-        //TODO: Update the status of the task to complete
         emit(
           PomodoroRunComplete(
             session: Session.longBreak,
@@ -173,7 +186,6 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
 
         Task task = _task.copyWith(currentStatus: currentStatus);
 
-        //TODO: Update task in database with new status
         await _databaseRepository.updateTask(
           userId: _userId,
           updatedTask: task,
@@ -183,7 +195,6 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
 
       if (state.session == Session.working) {
         nextSession = Session.shortBreak;
-        //HERE TEST FOR LONG BREAK
       } else {
         nextSession = Session.working;
       }

@@ -14,7 +14,6 @@ class PlannerBloc extends Bloc<PlannerEvent, PlannerState> {
     required AbstractDatabaseRepository databaseRepository,
     required String userId,
   })  : _databaseRepository = databaseRepository,
-        _userId = userId,
         super(PlannerInitial()) {
     on<PlannerReloadDataRequired>(_onPlannerReloadRequired);
 
@@ -28,7 +27,6 @@ class PlannerBloc extends Bloc<PlannerEvent, PlannerState> {
   }
 
   final AbstractDatabaseRepository _databaseRepository;
-  final String _userId;
   late final StreamSubscription _userSubscription;
 
   void _onPlannerReloadRequired(

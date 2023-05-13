@@ -97,179 +97,68 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
 
   void _onCreateTaskEventTaskNameChanged(
       CreateTaskEventTaskNameChanged event, Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: TaskName(event.taskName),
-        taskNameHasChanged: true,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDate: state.startDate,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      taskName: TaskName(event.taskName),
+      taskNameHasChanged: true,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskEventNumberOfWorkingSessionsChanged(
       CreateTaskEventNumberOfWorkingSessionsChanged event,
       Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: event.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      numberOfWorkingSessions: event.numberOfWorkingSessions,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskEventWorkingDurationChanged(
       CreateTaskEventWorkingDurationChanged event,
       Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: event.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDate: state.startDate,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      workingDuration: event.workingDuration,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskEventLongBreakDurationChanged(
       CreateTaskEventLongBreakDurationChanged event,
       Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: event.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDate: state.startDate,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      longBreakDuration: event.longBreakDuration,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskEventShortBreakDurationChanged(
       CreateTaskEventShortBreakDurationChanged event,
       Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: event.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDate: state.startDate,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      shortBreakDuration: event.shortBreakDuration,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskEventMoreInfoChanged(
       CreateTaskEventMoreInfoChanged event, Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: MoreInfo(event.moreInfoString),
-        moreInfoHasChanged: true,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDate: state.startDate,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      moreInfo: MoreInfo(event.moreInfoString),
+      moreInfoHasChanged: true,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskStartDateChanged(
@@ -282,31 +171,12 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
 
     state.startDateTextEditingController.text = text;
 
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDate: event.startDate,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      startDate: event.startDate,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskTimeChanged(
@@ -320,264 +190,110 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
     text = getTimeText(event.startTime!);
     state.timeOfDayTextingEditingController.text = text;
 
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDate: state.startDate,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: event.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      startTime: event.startTime,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskSundaySelected(
       CreateTaskSundaySelected event, Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: event.value ?? false,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      sundaySelected: event.value,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskMondaySelected(
       CreateTaskMondaySelected event, Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: event.value ?? false,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      mondaySelected: event.value,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskTuesdaySelected(
       CreateTaskTuesdaySelected event, Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: event.value ?? false,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      tuesdaySelected: event.value,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskWednesdaySelected(
       CreateTaskWednesdaySelected event, Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: event.value ?? false,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      wednesdaySelected: event.value,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskThursdaySelected(
       CreateTaskThursdaySelected event, Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: event.value ?? false,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      thursdaySelected: event.value,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskFridaySelected(
       CreateTaskFridaySelected event, Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: event.value ?? false,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      fridaySelected: event.value,
     );
+
+    emit(newState);
   }
 
   void _onCreateTaskSaturdaySelected(
       CreateTaskSaturdaySelected event, Emitter<CreateTaskState> emit) {
-    emit(
-      CreateTaskInProgress(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: state.formSubmissionAttempted,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: event.value ?? false,
-      ),
+    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
+      previousState: state,
+      saturdaySelected: event.value,
     );
+
+    emit(newState);
   }
 
   Future<void> _onCreateTaskEventSubmitButtonClicked(
       CreateTaskEventSubmitButtonClicked event,
       Emitter<CreateTaskState> emit) async {
-    emit(
-      CreateTaskSubmitting(
-        taskName: state.taskName,
-        taskNameHasChanged: state.taskNameHasChanged,
-        numberOfWorkingSessions: state.numberOfWorkingSessions,
-        workingDuration: state.workingDuration,
-        longBreakDuration: state.longBreakDuration,
-        shortBreakDuration: state.shortBreakDuration,
-        moreInfo: state.moreInfo,
-        moreInfoHasChanged: state.moreInfoHasChanged,
-        formSubmissionAttempted: true,
-        startDate: state.startDate,
-        startDateTextEditingController: state.startDateTextEditingController,
-        startTime: state.startTime,
-        timeOfDayTextingEditingController:
-            state.timeOfDayTextingEditingController,
-        sundaySelected: state.sundaySelected,
-        mondaySelected: state.mondaySelected,
-        tuesdaySelected: state.tuesdaySelected,
-        wednesdaySelected: state.wednesdaySelected,
-        thursdaySelected: state.thursdaySelected,
-        fridaySelected: state.fridaySelected,
-        saturdaySelected: state.saturdaySelected,
-      ),
+    CreateTaskSubmitting submittingState =
+        CreateTaskSubmitting.fromPreviousState(previousState: state);
+    emit(submittingState);
+
+    DateTime? newStartDate = _validateStartDate();
+    TimeOfDay? newStartTime = _validateStartTime();
+
+    submittingState = CreateTaskSubmitting.fromPreviousState(
+      previousState: state,
+      startTime: newStartTime,
+      startDate: newStartDate,
     );
 
-    _validateStartDate();
-    _validateStartTime();
+    emit(submittingState);
 
     bool valid = _validateAllFields();
 
-    if (!valid) return;
+    if (!valid) {
+      CreateTaskSubmittedFailure failureState =
+          CreateTaskSubmittedFailure.copyFromPreviousState(state);
+      emit(failureState);
+      return;
+    }
 
     Task task = Task(
       name: state.taskName.value,
@@ -599,61 +315,17 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
         task: task,
       );
 
-      emit(
-        CreateTaskSubmittedSuccesfully(
-          taskName: state.taskName,
-          taskNameHasChanged: state.taskNameHasChanged,
-          numberOfWorkingSessions: state.numberOfWorkingSessions,
-          workingDuration: state.workingDuration,
-          longBreakDuration: state.longBreakDuration,
-          shortBreakDuration: state.shortBreakDuration,
-          moreInfo: state.moreInfo,
-          moreInfoHasChanged: state.moreInfoHasChanged,
-          formSubmissionAttempted: state.formSubmissionAttempted,
-          startDate: state.startDate,
-          startDateTextEditingController: state.startDateTextEditingController,
-          startTime: state.startTime,
-          timeOfDayTextingEditingController:
-              state.timeOfDayTextingEditingController,
-          sundaySelected: state.sundaySelected,
-          mondaySelected: state.mondaySelected,
-          tuesdaySelected: state.tuesdaySelected,
-          wednesdaySelected: state.wednesdaySelected,
-          thursdaySelected: state.thursdaySelected,
-          fridaySelected: state.fridaySelected,
-          saturdaySelected: state.saturdaySelected,
-        ),
-      );
+      CreateTaskSubmittedSuccesfully successState =
+          CreateTaskSubmittedSuccesfully.copyFromPreviousState(state);
+      emit(successState);
     } on Exception catch (_) {
-      emit(
-        CreateTaskSubmittedFailure(
-          taskName: state.taskName,
-          taskNameHasChanged: state.taskNameHasChanged,
-          numberOfWorkingSessions: state.numberOfWorkingSessions,
-          workingDuration: state.workingDuration,
-          longBreakDuration: state.longBreakDuration,
-          shortBreakDuration: state.shortBreakDuration,
-          moreInfo: state.moreInfo,
-          moreInfoHasChanged: state.moreInfoHasChanged,
-          formSubmissionAttempted: state.formSubmissionAttempted,
-          startDate: state.startDate,
-          startDateTextEditingController: state.startDateTextEditingController,
-          startTime: state.startTime,
-          timeOfDayTextingEditingController:
-              state.timeOfDayTextingEditingController,
-          sundaySelected: state.sundaySelected,
-          mondaySelected: state.mondaySelected,
-          tuesdaySelected: state.tuesdaySelected,
-          wednesdaySelected: state.wednesdaySelected,
-          thursdaySelected: state.thursdaySelected,
-          fridaySelected: state.fridaySelected,
-          saturdaySelected: state.saturdaySelected,
-        ),
-      );
+      CreateTaskSubmittedFailure failureState =
+          CreateTaskSubmittedFailure.copyFromPreviousState(state);
+      emit(failureState);
     }
   }
 
-  void _validateStartDate() {
+  DateTime? _validateStartDate() {
     if (state.startDate == null &&
         state.startDateTextEditingController.text.length > 4) {
       // month/day/year
@@ -678,35 +350,12 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
       String newDate = [year, month, day].join('-');
 
       DateTime? startDate = DateTime.tryParse(newDate);
-      emit(
-        CreateTaskSubmitting(
-          taskName: state.taskName,
-          taskNameHasChanged: state.taskNameHasChanged,
-          numberOfWorkingSessions: state.numberOfWorkingSessions,
-          workingDuration: state.workingDuration,
-          longBreakDuration: state.longBreakDuration,
-          shortBreakDuration: state.shortBreakDuration,
-          moreInfo: state.moreInfo,
-          moreInfoHasChanged: state.moreInfoHasChanged,
-          formSubmissionAttempted: true,
-          startDate: startDate,
-          startDateTextEditingController: state.startDateTextEditingController,
-          startTime: state.startTime,
-          timeOfDayTextingEditingController:
-              state.timeOfDayTextingEditingController,
-          sundaySelected: state.sundaySelected,
-          mondaySelected: state.mondaySelected,
-          tuesdaySelected: state.tuesdaySelected,
-          wednesdaySelected: state.wednesdaySelected,
-          thursdaySelected: state.thursdaySelected,
-          fridaySelected: state.fridaySelected,
-          saturdaySelected: state.saturdaySelected,
-        ),
-      );
+      return startDate;
     }
+    return null;
   }
 
-  void _validateStartTime() {
+  TimeOfDay? _validateStartTime() {
     if (state.startTime == null &&
         state.timeOfDayTextingEditingController.text.length > 4) {
       String startTimeString = state.timeOfDayTextingEditingController.text;
@@ -723,34 +372,11 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
       if (hours != null && minutes != null) {
         TimeOfDay startTime = TimeOfDay(hour: hours, minute: minutes);
 
-        emit(
-          CreateTaskSubmitting(
-            taskName: state.taskName,
-            taskNameHasChanged: state.taskNameHasChanged,
-            numberOfWorkingSessions: state.numberOfWorkingSessions,
-            workingDuration: state.workingDuration,
-            longBreakDuration: state.longBreakDuration,
-            shortBreakDuration: state.shortBreakDuration,
-            moreInfo: state.moreInfo,
-            moreInfoHasChanged: state.moreInfoHasChanged,
-            formSubmissionAttempted: true,
-            startDate: state.startDate,
-            startDateTextEditingController:
-                state.startDateTextEditingController,
-            startTime: startTime,
-            timeOfDayTextingEditingController:
-                state.timeOfDayTextingEditingController,
-            sundaySelected: state.sundaySelected,
-            mondaySelected: state.mondaySelected,
-            tuesdaySelected: state.tuesdaySelected,
-            wednesdaySelected: state.wednesdaySelected,
-            thursdaySelected: state.thursdaySelected,
-            fridaySelected: state.fridaySelected,
-            saturdaySelected: state.saturdaySelected,
-          ),
-        );
+        return startTime;
       }
     }
+
+    return null;
   }
 
   bool _validateAllFields() {
@@ -760,31 +386,6 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
         state.timeOfDayTextingEditingController.text.isEmpty ||
         state.startDate == null ||
         state.startTime == null) {
-      emit(
-        CreateTaskSubmittedFailure(
-          taskName: state.taskName,
-          taskNameHasChanged: state.taskNameHasChanged,
-          numberOfWorkingSessions: state.numberOfWorkingSessions,
-          workingDuration: state.workingDuration,
-          longBreakDuration: state.longBreakDuration,
-          shortBreakDuration: state.shortBreakDuration,
-          moreInfo: state.moreInfo,
-          moreInfoHasChanged: state.moreInfoHasChanged,
-          formSubmissionAttempted: state.formSubmissionAttempted,
-          startDate: state.startDate,
-          startDateTextEditingController: state.startDateTextEditingController,
-          startTime: state.startTime,
-          timeOfDayTextingEditingController:
-              state.timeOfDayTextingEditingController,
-          sundaySelected: state.sundaySelected,
-          mondaySelected: state.mondaySelected,
-          tuesdaySelected: state.tuesdaySelected,
-          wednesdaySelected: state.wednesdaySelected,
-          thursdaySelected: state.thursdaySelected,
-          fridaySelected: state.fridaySelected,
-          saturdaySelected: state.saturdaySelected,
-        ),
-      );
       return false;
     }
     return true;
