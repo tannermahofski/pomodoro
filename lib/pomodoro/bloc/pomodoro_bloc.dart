@@ -43,7 +43,8 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
 
     _assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
     _audio = Audio('assets/sounds/jungle.mp3');
-    _assetsAudioPlayer.open(_audio, autoStart: false);
+    _assetsAudioPlayer.open(_audio,
+        autoStart: false, loopMode: LoopMode.single);
   }
 
   final Ticker _ticker;
