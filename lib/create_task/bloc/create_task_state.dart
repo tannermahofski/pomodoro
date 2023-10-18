@@ -6,7 +6,6 @@ abstract class CreateTaskState extends Equatable {
     required this.taskNameHasChanged,
     required this.numberOfWorkingSessions,
     required this.workingDuration,
-    required this.longBreakDuration,
     required this.shortBreakDuration,
     required this.moreInfo,
     required this.moreInfoHasChanged,
@@ -29,7 +28,6 @@ abstract class CreateTaskState extends Equatable {
   final double numberOfWorkingSessions;
   final double workingDuration;
   final double shortBreakDuration;
-  final double longBreakDuration;
   final MoreInfo moreInfo;
   final bool moreInfoHasChanged;
   final bool formSubmissionAttempted;
@@ -51,7 +49,6 @@ abstract class CreateTaskState extends Equatable {
         taskNameHasChanged,
         numberOfWorkingSessions,
         workingDuration,
-        longBreakDuration,
         shortBreakDuration,
         moreInfo,
         moreInfoHasChanged,
@@ -76,7 +73,6 @@ class CreateTaskInitial extends CreateTaskState {
     super.taskNameHasChanged = false,
     required super.numberOfWorkingSessions,
     required super.workingDuration,
-    required super.longBreakDuration,
     required super.shortBreakDuration,
     required super.moreInfo,
     super.moreInfoHasChanged = false,
@@ -101,7 +97,6 @@ class CreateTaskInProgress extends CreateTaskState {
     required super.taskNameHasChanged,
     required super.numberOfWorkingSessions,
     required super.workingDuration,
-    required super.longBreakDuration,
     required super.shortBreakDuration,
     required super.moreInfo,
     required super.moreInfoHasChanged,
@@ -126,7 +121,6 @@ class CreateTaskInProgress extends CreateTaskState {
     double? numberOfWorkingSessions,
     double? workingDuration,
     double? shortBreakDuration,
-    double? longBreakDuration,
     MoreInfo? moreInfo,
     bool? moreInfoHasChanged,
     bool? formSubmissionAttempted,
@@ -151,7 +145,6 @@ class CreateTaskInProgress extends CreateTaskState {
       workingDuration: workingDuration ?? previousState.workingDuration,
       shortBreakDuration:
           shortBreakDuration ?? previousState.shortBreakDuration,
-      longBreakDuration: longBreakDuration ?? previousState.longBreakDuration,
       moreInfo: moreInfo ?? previousState.moreInfo,
       moreInfoHasChanged:
           moreInfoHasChanged ?? previousState.moreInfoHasChanged,
@@ -180,7 +173,7 @@ class CreateTaskSubmitting extends CreateTaskState {
     required super.taskNameHasChanged,
     required super.numberOfWorkingSessions,
     required super.workingDuration,
-    required super.longBreakDuration,
+    // required super.longBreakDuration,
     required super.shortBreakDuration,
     required super.moreInfo,
     required super.moreInfoHasChanged,
@@ -209,7 +202,6 @@ class CreateTaskSubmitting extends CreateTaskState {
       numberOfWorkingSessions: previousState.numberOfWorkingSessions,
       workingDuration: previousState.workingDuration,
       shortBreakDuration: previousState.shortBreakDuration,
-      longBreakDuration: previousState.longBreakDuration,
       moreInfo: previousState.moreInfo,
       moreInfoHasChanged: previousState.moreInfoHasChanged,
       formSubmissionAttempted: true,
@@ -236,7 +228,6 @@ class CreateTaskSubmittedSuccesfully extends CreateTaskState {
     required super.taskNameHasChanged,
     required super.numberOfWorkingSessions,
     required super.workingDuration,
-    required super.longBreakDuration,
     required super.shortBreakDuration,
     required super.moreInfo,
     required super.moreInfoHasChanged,
@@ -262,7 +253,6 @@ class CreateTaskSubmittedSuccesfully extends CreateTaskState {
       numberOfWorkingSessions: previousState.numberOfWorkingSessions,
       workingDuration: previousState.workingDuration,
       shortBreakDuration: previousState.shortBreakDuration,
-      longBreakDuration: previousState.longBreakDuration,
       moreInfo: previousState.moreInfo,
       moreInfoHasChanged: previousState.moreInfoHasChanged,
       formSubmissionAttempted: previousState.formSubmissionAttempted,
@@ -289,7 +279,6 @@ class CreateTaskSubmittedFailure extends CreateTaskState {
     required super.taskNameHasChanged,
     required super.numberOfWorkingSessions,
     required super.workingDuration,
-    required super.longBreakDuration,
     required super.shortBreakDuration,
     required super.moreInfo,
     required super.moreInfoHasChanged,
@@ -315,7 +304,6 @@ class CreateTaskSubmittedFailure extends CreateTaskState {
       numberOfWorkingSessions: previousState.numberOfWorkingSessions,
       workingDuration: previousState.workingDuration,
       shortBreakDuration: previousState.shortBreakDuration,
-      longBreakDuration: previousState.longBreakDuration,
       moreInfo: previousState.moreInfo,
       moreInfoHasChanged: previousState.moreInfoHasChanged,
       formSubmissionAttempted: previousState.formSubmissionAttempted,

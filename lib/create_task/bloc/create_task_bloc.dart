@@ -25,7 +25,6 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
             taskName: const TaskName(''),
             numberOfWorkingSessions: kNumberOfWorkingSessionsStartingValue,
             workingDuration: kWorkingDurationStartingValue,
-            longBreakDuration: kLongBreakDurationStartingValue,
             shortBreakDuration: kShortBreakDurationStartingValue,
             moreInfo: const MoreInfo(''),
             startDate: DateTime.now(),
@@ -44,9 +43,6 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
     );
     on<CreateTaskEventWorkingDurationChanged>(
       _onCreateTaskEventWorkingDurationChanged,
-    );
-    on<CreateTaskEventLongBreakDurationChanged>(
-      _onCreateTaskEventLongBreakDurationChanged,
     );
     on<CreateTaskEventShortBreakDurationChanged>(
       _onCreateTaskEventShortBreakDurationChanged,
@@ -123,17 +119,6 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
     CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
       previousState: state,
       workingDuration: event.workingDuration,
-    );
-
-    emit(newState);
-  }
-
-  void _onCreateTaskEventLongBreakDurationChanged(
-      CreateTaskEventLongBreakDurationChanged event,
-      Emitter<CreateTaskState> emit) {
-    CreateTaskInProgress newState = CreateTaskInProgress.copyWithPreviousState(
-      previousState: state,
-      longBreakDuration: event.longBreakDuration,
     );
 
     emit(newState);
@@ -300,7 +285,6 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
       numberOfWorkingSessions: state.numberOfWorkingSessions.toInt(),
       workingDuration: state.workingDuration.toInt(),
       shortBreakDuration: state.shortBreakDuration.toInt(),
-      longBreakDuration: state.longBreakDuration.toInt(),
       moreInfo: state.moreInfo.value,
       startDate: state.startDate,
       startTime: state.startTime,

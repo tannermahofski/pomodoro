@@ -11,7 +11,6 @@ class Task extends Equatable {
     required this.numberOfWorkingSessions,
     required this.workingDuration,
     required this.shortBreakDuration,
-    required this.longBreakDuration,
     required this.moreInfo,
     this.startDate,
     this.startTime,
@@ -23,7 +22,6 @@ class Task extends Equatable {
   final int numberOfWorkingSessions;
   final int workingDuration;
   final int shortBreakDuration;
-  final int longBreakDuration;
   final String moreInfo;
   final DateTime? startDate;
   final TimeOfDay? startTime;
@@ -64,7 +62,6 @@ class Task extends Equatable {
       numberOfWorkingSessions: snapshot[kNumberOfWorkingSessions],
       workingDuration: snapshot[kWorkingDuration],
       shortBreakDuration: snapshot[kShortBreakDuration],
-      longBreakDuration: snapshot[kLongBreakDuration],
       moreInfo: snapshot[kMoreInfo],
       startDate: snapshot.containsKey(kStartDate)
           ? snapshot[kStartDate].toDate()
@@ -85,7 +82,6 @@ class Task extends Equatable {
       numberOfWorkingSessions: json[kNumberOfWorkingSessions],
       workingDuration: json[kWorkingDuration],
       shortBreakDuration: json[kShortBreakDuration],
-      longBreakDuration: json[kLongBreakDuration],
       moreInfo: json[kMoreInfo],
       startDate:
           json.containsKey(kStartDate) ? json[kStartDate].toDate() : null,
@@ -106,7 +102,6 @@ class Task extends Equatable {
       kNumberOfWorkingSessions: numberOfWorkingSessions,
       kWorkingDuration: workingDuration,
       kShortBreakDuration: shortBreakDuration,
-      kLongBreakDuration: longBreakDuration,
       kMoreInfo: moreInfo,
       kStartDate: startDate,
       kTimeOfDay: ("${startTime?.hour}*${startTime?.minute}"),
@@ -133,7 +128,6 @@ class Task extends Equatable {
           numberOfWorkingSessions ?? this.numberOfWorkingSessions,
       workingDuration: workingDuration ?? this.workingDuration,
       shortBreakDuration: shortBreakDuration ?? this.shortBreakDuration,
-      longBreakDuration: longBreakDuration ?? this.longBreakDuration,
       moreInfo: moreInfo ?? this.moreInfo,
       startDate: startDate ?? this.startDate,
       startTime: startTime ?? this.startTime,

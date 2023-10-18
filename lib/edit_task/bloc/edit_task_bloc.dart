@@ -236,7 +236,7 @@ class EditTaskBloc extends Bloc<EditTaskEvent, EditTaskState> {
       numberOfWorkingSessions: state.numberOfWorkingSessions.toInt(),
       workingDuration: state.workingDuration.toInt(),
       shortBreakDuration: state.shortBreakDuration.toInt(),
-      longBreakDuration: _task.longBreakDuration,
+      // longBreakDuration: _task.longBreakDuration,
       moreInfo: state.moreInfo.value,
       startDate: state.startDate,
       startTime: state.startTime,

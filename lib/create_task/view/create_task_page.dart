@@ -150,20 +150,6 @@ class CreateTaskBuilder extends StatelessWidget {
                       );
                 },
               ),
-              SliderWithTitle(
-                text: 'Long Break Duration',
-                value: state.longBreakDuration,
-                unit: 'Minutes',
-                minValue: kLongBreakDurationMinValue,
-                maxValue: kLongBreakDurationMaxValue,
-                onChanged: (value) {
-                  context.read<CreateTaskBloc>().add(
-                        CreateTaskEventLongBreakDurationChanged(
-                          longBreakDuration: value,
-                        ),
-                      );
-                },
-              ),
               RoundedTextFieldWithErrorMessage(
                 hintText: 'More Info',
                 onChanged: (input) {

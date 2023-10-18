@@ -198,7 +198,7 @@ class HomeBuilder extends StatelessWidget {
                 );
               },
               onLongPress: () {
-                showDeletionDialog(task, context);
+                showDeletionEditDialog(task, context);
               },
             );
           },
@@ -207,17 +207,17 @@ class HomeBuilder extends StatelessWidget {
     );
   }
 
-  Future<void> showDeletionDialog(Task task, BuildContext context) async {
+  Future<void> showDeletionEditDialog(Task task, BuildContext context) async {
     AwesomeDialog(
       context: context,
       animType: AnimType.scale,
       dialogType: DialogType.error,
       headerAnimationLoop: false,
       body: const Center(
-        child: Text('You have completed the task!'),
+        child: Text('Do you want to edit or delete the task?'),
       ),
       btnOkText: 'Remove',
-      btnOkColor: Colors.red,
+      btnOkColor: kErrorColor,
       btnOkIcon: Icons.close,
       btnOkOnPress: () {
         context.read<HomeBloc>().add(
@@ -225,7 +225,7 @@ class HomeBuilder extends StatelessWidget {
             );
       },
       btnCancelText: 'Edit',
-      btnCancelColor: Colors.green,
+      btnCancelColor: kPear,
       btnCancelIcon: Icons.edit,
       btnCancelOnPress: () {
         Navigator.of(context).push(EditTaskPage.route(task));

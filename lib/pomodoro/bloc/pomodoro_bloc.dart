@@ -38,7 +38,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     sessionTimingMap = {
       Session.working: task.workingDuration * 60,
       Session.shortBreak: task.shortBreakDuration * 60,
-      Session.longBreak: task.longBreakDuration * 60,
+      // Session.longBreak: task.longBreakDuration * 60,
     };
 
     _assetsAudioPlayer = AssetsAudioPlayer.newPlayer();

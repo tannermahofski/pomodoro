@@ -38,17 +38,6 @@ class CreateTaskEventWorkingDurationChanged extends CreateTaskEvent {
   List<Object> get props => [workingDuration];
 }
 
-class CreateTaskEventLongBreakDurationChanged extends CreateTaskEvent {
-  const CreateTaskEventLongBreakDurationChanged({
-    required this.longBreakDuration,
-  });
-
-  final double longBreakDuration;
-
-  @override
-  List<Object> get props => [longBreakDuration];
-}
-
 class CreateTaskEventShortBreakDurationChanged extends CreateTaskEvent {
   const CreateTaskEventShortBreakDurationChanged({
     required this.shortBreakDuration,
